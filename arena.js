@@ -137,6 +137,8 @@ function lockMove(moveId, idPlayer) {
 
 function startAttack() {
     if (playersTurn) {
+        attack.currentTime = 0;
+        attack.play();
         let opponent = document.getElementById('opponent');
         opponent.classList.remove('move-img-left');
         opponent.classList.remove('move-img-right');
@@ -150,6 +152,8 @@ function startAttack() {
         setTimeout(function () {
             champion.classList.add('move-img-right');
             if (currentEnemyHealth < 0) {
+                dead.currentTime = 0;
+                dead.play();
                 enemyHealth.setAttribute('style', `width:${0 * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
                 enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
                 opponent.classList.add('turn-img-round');
@@ -191,6 +195,8 @@ async function loadMove(url) {
 
 
 function startEnemyAttack() {
+    attack.currentTime = 0;
+    attack.play();
     let opponent = document.getElementById('opponent');
     opponent.classList.add('move-img-left');
     setTimeout(function () {

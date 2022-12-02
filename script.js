@@ -17,6 +17,9 @@ let spawn = new Audio('sound/spawn.wav');
 spawn.volume = 0.2;
 let cancel = new Audio('sound/cancel.wav');
 cancel.volume = 0.2;
+let attack = new Audio('sound/attack.mp3');
+let dead = new Audio('sound/dead.mp3');
+
 
 loadPokemon(1, 20);
 
