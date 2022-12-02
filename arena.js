@@ -8,9 +8,11 @@ let chosenAttackDmg = 0;
 let playersTurn = true;
 
 let idEnemy = 18;
+let idPlayer;
 
 
 function createArena(id) {
+    idPlayer = id-1;
     let miniCanvas = document.getElementById('miniCanvas');
     miniCanvas.classList.add('d-none');
     let arena = document.getElementById('arena');
@@ -135,12 +137,15 @@ function lockMove(moveId, idPlayer) {
 
 function startAttack() {
     if (playersTurn) {
+        let opponent = document.getElementById('opponent');
+        opponent.classList.remove('move-img-left');
+        opponent.classList.remove('move-img-right');
         click.currentTime = 0;
         click.play();
-        currentEnemyHealth = currentEnemyHealth - chosenAttackDmg;
+        currentEnemyHealth -= Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100 * pokemons[idPlayer].stats[1].base_stat / 100);
+        console.log("Inflicted dmg: ", Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100))
         let enemyHealth = document.getElementById('innerEnemy');
         let champion = document.getElementById('champion');
-        let opponent = document.getElementById('opponent');
         champion.classList.add('move-img-left');
         setTimeout(function () {
             champion.classList.add('move-img-right');
@@ -187,9 +192,9 @@ async function loadMove(url) {
 
 function startEnemyAttack() {
     let opponent = document.getElementById('opponent');
+    opponent.classList.add('move-img-left');
     setTimeout(function () {
-        opponent.classList.remove('move-img-left');
-        opponent.classList.remove('move-img-right');
+        opponent.classList.add('move-img-right');
         playersTurn = true;
     }, 2000);
 }
