@@ -7,25 +7,24 @@ let ids = [];
 
 // All sounds
 let soundtrack = new Audio("sound/background.mp3");
+soundtrack.volume = 0.2;
 let fight = new Audio("sound/fight.mp3");
+fight.volume = 0.2;
+fight.currentTime = 1;
 let click = new Audio('sound/click.wav');
+click.volume = 0.2;
 let spawn = new Audio('sound/spawn.wav');
+spawn.volume = 0.2;
 let cancel = new Audio('sound/cancel.wav');
+cancel.volume = 0.2;
 
-loadPokemon();
-
-
-
+loadPokemon(1, 20);
 
 
-function loadPokemon() {
-    console.log("pulling pokemon...");
-
-    for (i = 1; i < 152; i++) {
+function loadPokemon(start, end) {
+    for (i = start; i < end+2; i++) {
         ids.push(i);
     }
-
-    console.log("done");
 }
 
 
@@ -39,21 +38,26 @@ async function getData() {
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, ids[i]);
     }
-    console.log(pokemons[0].name);
 }
 
 
 function renderPokemon(currentPokemon, id) {
     let canvas = document.getElementById('canvas');
-    canvas.innerHTML += `
+    canvas.innerHTML += templateHTML(currentPokemon, id);
+}
+
+
+function templateHTML(currentPokemon, id) {
+    return `
         <div class="wrap">
             <div class="card" id="card${id}" onclick="showMenu(${id})">
-                <span>Name<br><b>${currentPokemon.name}</b> ${id}</span>
+                <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
                 <span>Height: ${currentPokemon.height}</span>
                 <span>Weight: ${currentPokemon.weight}</span>
             </div>
-        </div>`;
+        </div>
+    `;
 }
 
 
@@ -72,7 +76,7 @@ function showMenu(id) {
 
 function renderSinglePokemon(id) {
     return `
-        <div class="wrap">
+        <div class="wrap-nohover">
             <div class="card-nohover" id="card${id}" onclick="showMenu(${id})">
                 <span>Name<br><b>${pokemons[id-1].name}</b> ${id}</span>
                 <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.front_default}">
@@ -81,7 +85,7 @@ function renderSinglePokemon(id) {
                 <button class="btn" onclick="startFight(event, ${id})">Select as Champion</button>
             </div>
         </div>
-`;
+    `;
 }
 
 
@@ -104,6 +108,13 @@ function startFight(event, id) {
 
 function startEffects(id) {
     let card = document.getElementById(`card${id}`);
+    sequenceOfCardEffects(card);
+    let image = document.getElementById(`img${id}`);
+    image.classList.add('rotate');
+}
+
+
+function sequenceOfCardEffects(card) {
     setTimeout(function() {
         card.classList.add('green');
     }, 500);
@@ -127,9 +138,6 @@ function startEffects(id) {
         card.classList.remove('green');
     }, 3000);
     card.classList.add('border-green');
-
-    let image = document.getElementById(`img${id}`);
-    image.classList.add('rotate');
 }
 
 
@@ -145,27 +153,46 @@ function createArena(id) {
             spawn.play();
             placePokoemon(arena, id);
             let overlay = document.getElementById('overlay');
-            overlay.setAttribute('onclick', 'hideOverlayDelayed();');
+            overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
         }, 2000);
     }, 1000);
-    
 }
 
 
 function placePokoemon(arena, id) {
     arena.innerHTML = '';
-    arena.innerHTML += `
-        <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
-        <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[55].sprites.front_default}">
-    `;
+    setTimeout(function() {
+        arena.innerHTML += `
+            <button class="btn" onclick="closeArena(event)">close</button>
+            <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
+            <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
+        `;
+    }, 600)
 }
 
 
-function hideOverlayDelayed() {
+function closeArena(event) {
+    click.play();
+    hideOverlayDelayed(event);
+}
+
+
+function hideOverlayDelayed(event) {
+    event.stopPropagation();
     let overlay = document.getElementById('overlay');
     let miniCanvas = document.getElementById('miniCanvas');
     let arena = document.getElementById('arena');
+    overlayTimeout(overlay, arena, miniCanvas);
+    arena.classList.remove('big');
+    arena.classList.add('small');
+    arena.innerHTML = '';
+    fight.pause();
+    fight.currentTime = 1;
+    overlay.setAttribute('onclick', 'hideOverlay();');
+}
 
+
+function overlayTimeout() {
     setTimeout(function() {
         overlay.classList.add('d-none');
         arena.classList.remove('d-flex');
@@ -173,20 +200,12 @@ function hideOverlayDelayed() {
         miniCanvas.classList.remove('d-none');
         cancel.play();
     }, 1000);
-
-    arena.classList.remove('big');
-    arena.classList.add('small');
-    arena.innerHTML = '';
-    fight.pause();
-    fight.currentTime = 0;
-    overlay.setAttribute('onclick', 'hideOverlay();');
 }
 
 
 function hideOverlay() {
     let overlay = document.getElementById('overlay');
     let miniCanvas = document.getElementById('miniCanvas');
-    let arena = document.getElementById('arena');
     overlay.classList.add('d-none');
     miniCanvas.classList.remove('d-none');
     cancel.play();
