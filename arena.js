@@ -12,7 +12,7 @@ let idPlayer;
 
 
 function createArena(id) {
-    idPlayer = id-1;
+    idPlayer = id - 1;
     let miniCanvas = document.getElementById('miniCanvas');
     miniCanvas.classList.add('d-none');
     let arena = document.getElementById('arena');
@@ -151,7 +151,7 @@ function startAttack() {
         champion.classList.add('move-img-left');
         setTimeout(function () {
             champion.classList.add('move-img-right');
-            if (currentEnemyHealth < 0) {
+            if (currentEnemyHealth < 1) {
                 dead.currentTime = 0;
                 dead.play();
                 enemyHealth.setAttribute('style', `width:${0 * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
