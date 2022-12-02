@@ -152,3 +152,69 @@ footer {
     height: 1;
     transition: all 1s ease-in;
 }
+
+.attackbtn {
+    border: none;
+    cursor: pointer;
+    margin-top: 24px;
+    align-self: center;
+    color: white;
+    font-size: larger;
+    background: rgb(55, 55, 55);
+    width: 150px;
+    height: 50px;
+    position:absolute;
+    bottom:80px;
+}
+
+.attackbtn:hover {
+    background: rgb(80, 80, 80);
+}
+
+.movebtn {
+    border: none;
+    cursor: pointer;
+    margin-top: 24px;
+    align-self: center;
+    color: white;
+    font-size: larger;
+    background: rgb(170, 90, 90);
+    width: 150px;
+    height: 50px;
+}
+
+.movebtn:hover {
+    background: rgb(200, 100, 100);
+}
+
+.movebtn:focus {
+    border: 2px solid black; 
+}
+
+.move-container {
+    position: absolute;
+    bottom: 60px;
+    left: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.move-img-left {
+    transform: translateX(-30px);
+    transition: all 225ms ease-in;
+}
+
+.move-img-right {
+    transform: translateX(30px);
+    transition: all 225ms ease-in;
+}
+
+.turn-img-round {
+    transform: rotate(180deg);
+    transition: all 225ms ease-in;
+}
+
+.drop-img-down {
+    transform: translateY(500px);
+    transition: all 300ms ease-in;
+}

@@ -31,7 +31,7 @@ function loadPokemon(start, end) {
 function loadMore() {
     let loadbtn = document.getElementById('loadbtn');
     if (ids.length < 22) {
-        loadbtn.innerHTML = "Loading completed";
+        loadbtn.innerHTML = "loading completed";
         pokemons = [];
         ids = [];
         click.play();
@@ -108,6 +108,7 @@ function changeColor(type, id) {
 
 
 function showMenu(id) {
+    click.currentTime = 0;
     click.play();
     cancel.pause();
     cancel.currentTime = 0;
@@ -130,7 +131,7 @@ function renderSinglePokemon(id) {
                 <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[1].base_stat}px;">${pokemons[id-1].stats[1].base_stat}/100</div></div></div>
                 <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[2].base_stat}px;">${pokemons[id-1].stats[2].base_stat}/100</div></div></div>
                 <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[5].base_stat}px;">${pokemons[id-1].stats[5].base_stat}/100</div></div></div>
-                <button class="btn" onclick="startFight(event, ${id})">Select as Champion</button>
+                <button class="btn" onclick="startFight(event, ${id})">select as Champion</button>
             </div>
         </div>
     `;
@@ -189,47 +190,6 @@ function sequenceOfCardEffects(card) {
 }
 
 
-function createArena(id) {
-    let miniCanvas = document.getElementById('miniCanvas');
-    miniCanvas.classList.add('d-none');
-    let arena = document.getElementById('arena');
-    arena.classList.add('d-flex');
-    arena.classList.remove('d-none');
-    setTimeout(function() {
-        arena.classList.add('big');
-        setTimeout(function() {
-            spawn.play();
-            placePokoemon(arena, id);
-            let overlay = document.getElementById('overlay');
-            overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
-        }, 2000);
-    }, 1000);
-}
-
-
-function placePokoemon(arena, id) {
-    arena.innerHTML = '';
-    setTimeout(function() {
-        arena.innerHTML += `
-            <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">retreat</button>
-            <div>
-                <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
-                <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
-            </div>
-        `;
-    }, 600);
-    setPlayerHealth(id-1);
-    setEnemyHealth(18);
-    renderArenaMenu(arena, id-1, 18);
-}
-
-
-function closeArena(event) {
-    click.play();
-    hideOverlayDelayed(event);
-}
-
-
 function hideOverlayDelayed(event) {
     event.stopPropagation();
     let overlay = document.getElementById('overlay');
@@ -251,6 +211,7 @@ function overlayTimeout() {
         arena.classList.remove('d-flex');
         arena.classList.add('d-none');
         miniCanvas.classList.remove('d-none');
+        cancel.currentTime = 0;
         cancel.play();
     }, 1000);
 }
@@ -261,6 +222,7 @@ function hideOverlay() {
     let miniCanvas = document.getElementById('miniCanvas');
     overlay.classList.add('d-none');
     miniCanvas.classList.remove('d-none');
+    cancel.currentTime = 0;
     cancel.play();
 }
 
