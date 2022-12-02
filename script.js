@@ -31,9 +31,11 @@ function loadPokemon(start, end) {
 function loadMore() {
     let loadbtn = document.getElementById('loadbtn');
     if (ids.length < 22) {
-        loadbtn.innerHTML = "Loading completed"
+        loadbtn.innerHTML = "Loading completed";
+        pokemons = [];
+        ids = [];
         click.play();
-        loadPokemon(21, 150);
+        loadPokemon(1, 150);
         getData();
     } else {
         cancel.play();
@@ -68,10 +70,10 @@ function templateHTML(currentPokemon, id) {
             <div class="card" id="card${id}" onclick="showMenu(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
                 <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
-                <span>Abilities:</span>
-                <span>${currentPokemon.moves[0].move.name}</span>
-                <span>${checkAbility(currentPokemon, 1)}</span>
-                <span>${checkAbility(currentPokemon, 2)}</span>
+                <span>Abilities</span>
+                <span style="font-size:smaller;">+ ${currentPokemon.moves[0].move.name}</span>
+                <span style="font-size:smaller;">+ ${checkAbility(currentPokemon, 1)}</span>
+                <span style="font-size:smaller;">+ ${checkAbility(currentPokemon, 2)}</span>
             </div>
         </div>
     `;
@@ -210,10 +212,15 @@ function placePokoemon(arena, id) {
     setTimeout(function() {
         arena.innerHTML += `
             <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">retreat</button>
-            <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
-            <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
+            <div>
+                <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
+                <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
+            </div>
         `;
-    }, 600)
+    }, 600);
+    setPlayerHealth(id-1);
+    setEnemyHealth(18);
+    renderArenaMenu(arena, id-1, 18);
 }
 
 

@@ -2,10 +2,15 @@ body {
     margin: 0;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     box-sizing: border-box;
-    background: rgb(14 , 14, 14);
+    background: rgb(55, 55, 55);
 }
 
 h1 {
+    color: white;
+}
+
+a {
+    text-decoration: none;
     color: white;
 }
 
@@ -65,7 +70,8 @@ h1 {
 }
 
 footer {
-    background: #ccc;
+    background: rgb(55, 55, 55);
+    color: white;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -124,6 +130,7 @@ footer {
     position: absolute;
     top: 50px;
     background: white;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 24px;
