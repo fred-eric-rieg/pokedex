@@ -154,6 +154,8 @@ footer {
 
 .arena {
     z-index: 2;
+    position: absolute;
+    top: 50px;
     background: white;
     align-items: center;
     justify-content: center;

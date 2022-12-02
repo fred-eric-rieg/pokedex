@@ -163,7 +163,7 @@ function placePokoemon(arena, id) {
     arena.innerHTML = '';
     setTimeout(function() {
         arena.innerHTML += `
-            <button class="btn" onclick="closeArena(event)">close</button>
+            <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">retreat</button>
             <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.back_default}">
             <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
         `;
