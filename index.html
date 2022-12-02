@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
     <script src="script.js"></script>
 </head>
 <body onload="getData()">
@@ -24,6 +25,11 @@
     <div class="canvas" id="canvas">
 
     </div>
+
+    <div style="display:flex;align-items:center;justify-content:center;background:inherit;padding:16px;">
+        <button class="btn" id="loadbtn" onclick="loadMore()">Load all</button>
+    </div>
+    
 
     <footer>
         <span>8-bit soundtrac from <a href="https://www.fesliyanstudios.com/royalty-free-music/download/8-bit-adventure/2282">https://www.fesliyanstudios.com/royalty-free-music/download/8-bit-adventure/2282</a></span>

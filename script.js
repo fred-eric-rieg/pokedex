@@ -28,9 +28,23 @@ function loadPokemon(start, end) {
 }
 
 
+function loadMore() {
+    let loadbtn = document.getElementById('loadbtn');
+    if (ids.length < 22) {
+        loadbtn.innerHTML = "Loading completed"
+        click.play();
+        loadPokemon(21, 150);
+        getData();
+    } else {
+        cancel.play();
+    }
+}
+
+
 async function getData() {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML = '';
+    canvas.classList.add('d-none');
     for (let i = 0; i < ids.length; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${ids[i]}/`;
         let response = await fetch(url);
@@ -38,6 +52,7 @@ async function getData() {
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, ids[i]);
     }
+    canvas.classList.remove('d-none');
 }
 
 
@@ -50,14 +65,43 @@ function renderPokemon(currentPokemon, id) {
 function templateHTML(currentPokemon, id) {
     return `
         <div class="wrap">
-            <div class="card" id="card${id}" onclick="showMenu(${id})">
+            <div class="card" id="card${id}" onclick="showMenu(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
                 <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
-                <span>Height: ${currentPokemon.height}</span>
-                <span>Weight: ${currentPokemon.weight}</span>
+                <span>Abilities:</span>
+                <span>${currentPokemon.moves[0].move.name}</span>
+                <span>${checkAbility(currentPokemon, 1)}</span>
+                <span>${checkAbility(currentPokemon, 2)}</span>
             </div>
         </div>
     `;
+}
+
+
+function checkAbility(currentPokemon, index) {
+    if (currentPokemon.moves[index]) {
+        return `${currentPokemon.moves[index].move.name}`;
+    } else {
+        return '';
+    }
+}
+
+
+function changeColor(type, id) {
+    let card = document.getElementById(`card${id}`);
+    if (type == "grass") {
+        card.classList.add('green-card');
+    } else if (type == "fire") {
+        card.classList.add('red-card');
+    } else if (type == "water") {
+        card.classList.add('blue-card');
+    } else if (type == "wind") {
+        card.classList.add('blue-card');
+    } else if (type == "normal") {
+        card.classList.add('grey-card');
+    } else if (type == "bug") {
+        card.classList.add('brown-card');
+    }
 }
 
 
@@ -78,10 +122,12 @@ function renderSinglePokemon(id) {
     return `
         <div class="wrap-nohover">
             <div class="card-nohover" id="card${id}" onclick="showMenu(${id})">
-                <span>Name<br><b>${pokemons[id-1].name}</b> ${id}</span>
+                <span>#${id}<br><b>${pokemons[id-1].name.toUpperCase()}</b></span>
                 <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.front_default}">
-                <span>Height: ${pokemons[id-1].height}</span>
-                <span>Weight: ${pokemons[id-1].weight}</span>
+                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[0].base_stat}px;">${pokemons[id-1].stats[0].base_stat}/100</div></div></div>
+                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[1].base_stat}px;">${pokemons[id-1].stats[1].base_stat}/100</div></div></div>
+                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[2].base_stat}px;">${pokemons[id-1].stats[2].base_stat}/100</div></div></div>
+                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[5].base_stat}px;">${pokemons[id-1].stats[5].base_stat}/100</div></div></div>
                 <button class="btn" onclick="startFight(event, ${id})">Select as Champion</button>
             </div>
         </div>
