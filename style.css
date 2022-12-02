@@ -29,7 +29,7 @@ a {
 
 .mini-canvas {
     z-index: 2;
-    background: rgb(255, 152, 17);
+    background: rgb(204, 1, 99);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,16 +46,16 @@ a {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    background: rgb(255, 152, 17);
+    background: rgb(204, 1, 99);
+    background-image: url(img/background.jpg);
 }
 
 .wrap {
     display: flex;
     align-items: center;
     width: 150px;
-    height: 350px;
+    height: 250px;
     padding: 8px;
-    background: rgb(255, 152, 17);
     box-sizing: content-box;
 }
 
@@ -65,7 +65,7 @@ a {
     width: 250px;
     height: 450px;
     padding: 16px;
-    background: rgb(255, 152, 17);
+    background: rgb(204, 1, 99);
     box-sizing: content-box;
 }
 
@@ -87,16 +87,17 @@ footer {
     border: none;
     cursor: pointer;
     margin-top: 24px;
+    border-radius: 15px;
     align-self: center;
     color: white;
     font-size: larger;
-    background: darkviolet;
+    background: rgb(211, 0, 88);
     width: 150px;
     height: 50px;
 }
 
 .btn:hover {
-    background: violet;
+    background: rgb(238, 130, 164);
 }
 
 .d-none {
@@ -137,6 +138,7 @@ footer {
     border-radius: 25px;
     width: 1px;
     height: 1px;
+    background: #ccc;
     transition: all 1s ease-in;
 }
 

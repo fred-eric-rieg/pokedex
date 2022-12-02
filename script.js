@@ -7,18 +7,20 @@ let ids = [];
 
 // All sounds
 let soundtrack = new Audio("sound/background.mp3");
-soundtrack.volume = 0.2;
+soundtrack.volume = 0.05;
 let fight = new Audio("sound/fight.mp3");
-fight.volume = 0.2;
+fight.volume = 0.05;
 fight.currentTime = 1;
 let click = new Audio('sound/click.wav');
-click.volume = 0.2;
+click.volume = 0.1;
 let spawn = new Audio('sound/spawn.wav');
-spawn.volume = 0.2;
+spawn.volume = 0.1;
 let cancel = new Audio('sound/cancel.wav');
-cancel.volume = 0.2;
+cancel.volume = 0.1;
 let attack = new Audio('sound/attack.mp3');
+attack.volume = 0.1;
 let dead = new Audio('sound/dead.mp3');
+dead.volume = 0.1;
 
 
 loadPokemon(1, 20);
@@ -73,10 +75,6 @@ function templateHTML(currentPokemon, id) {
             <div class="card" id="card${id}" onclick="showMenu(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
                 <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
-                <span>Abilities</span>
-                <span style="font-size:smaller;">+ ${currentPokemon.moves[0].move.name}</span>
-                <span style="font-size:smaller;">+ ${checkAbility(currentPokemon, 1)}</span>
-                <span style="font-size:smaller;">+ ${checkAbility(currentPokemon, 2)}</span>
             </div>
         </div>
     `;
@@ -128,13 +126,16 @@ function renderSinglePokemon(id) {
     return `
         <div class="wrap-nohover">
             <div class="card-nohover" id="card${id}" onclick="showMenu(${id})">
-                <span>#${id}<br><b>${pokemons[id-1].name.toUpperCase()}</b></span>
+                <div style="display:flex;justify-content:space-between;">
+                    <span>#${id}<br><b>${pokemons[id-1].name.toUpperCase()}</b></span>
+                    <button class="btn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
+                </div>
                 <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.front_default}">
                 <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[0].base_stat}px;">${pokemons[id-1].stats[0].base_stat}/100</div></div></div>
                 <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[1].base_stat}px;">${pokemons[id-1].stats[1].base_stat}/100</div></div></div>
                 <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[2].base_stat}px;">${pokemons[id-1].stats[2].base_stat}/100</div></div></div>
                 <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[5].base_stat}px;">${pokemons[id-1].stats[5].base_stat}/100</div></div></div>
-                <button class="btn" onclick="startFight(event, ${id})">select as Champion</button>
+                <button class="btn" onclick="startFight(event, ${id})">select Champion</button>
             </div>
         </div>
     `;
@@ -220,7 +221,8 @@ function overlayTimeout() {
 }
 
 
-function hideOverlay() {
+function hideOverlay(event) {
+    event.stopPropagation();
     let overlay = document.getElementById('overlay');
     let miniCanvas = document.getElementById('miniCanvas');
     overlay.classList.add('d-none');

@@ -4,7 +4,7 @@
     background: white;
     border-radius: 25px;
     width: 120px;
-    height: 300px;
+    height: 200px;
     border: 1px solid black;
     padding: 16px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
@@ -27,7 +27,7 @@
 
 .card:hover {
     width: 124px;
-    height: 306px;
+    height: 206px;
     transition: all 225ms ease-in-out;
 }
 
