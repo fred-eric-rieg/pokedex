@@ -61,6 +61,7 @@ function spritesHTML() {
 function closeArena(event) {
     playSound(click);
     hideOverlayDelayed(event);
+    playersTurn = true;
 }
 
 
