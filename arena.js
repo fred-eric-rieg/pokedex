@@ -1,24 +1,22 @@
-
-let currentPlayerHealth = 0;
-let currentEnemyHealth = 0;
-
-let chosenAttackName = '';
-let chosenAttackDmg = 0;
-
-let playersTurn = true;
-
-let idEnemy = 18;
+let idEnemy;
 let idPlayer;
 
 /**
  * Generates a random id and sets idEnemy to this id => random enemy to fight player in arena
  */
 function getRandomEnemy() {
-    let randomId = Math.floor(Math.random() * 152);
+    console.log("number of pokemons loaded: ", pokemons.length)
+    if (pokemons.length < 22) {
+        let randomId = Math.floor(Math.random() * 21);
+        idEnemy = randomId;
+    } else if (pokemons.length > 21) {
+        let randomId = Math.floor(Math.random() * 152);
+        idEnemy = randomId;
+    }
 }
 
 
-function createArena(id) {
+function openArena(id) {
     idPlayer = id - 1;
     let miniCanvas = document.getElementById('miniCanvas');
     miniCanvas.classList.add('d-none');
@@ -29,7 +27,7 @@ function createArena(id) {
         arena.classList.add('big');
         setTimeout(function () {
             playSound(spawn);
-            placePokoemon(arena, id);
+            placePokoemon(arena);
             let overlay = document.getElementById('overlay');
             overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
         }, 2000);
@@ -37,20 +35,26 @@ function createArena(id) {
 }
 
 
-function placePokoemon(arena, id) {
+function placePokoemon(arena) {
+    getRandomEnemy();
     arena.innerHTML = '';
     setTimeout(function () {
-        arena.innerHTML += `
-            <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">close</button>
-            <div>
-                <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.back_default}">
-                <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[18].sprites.front_default}">
-            </div>
-        `;
+        arena.innerHTML += spritesHTML();
     }, 600);
-    setPlayerHealth(id - 1);
-    setEnemyHealth(18);
-    renderArenaMenu(arena, id - 1, 18);
+    setPlayerHealth();
+    setEnemyHealth();
+    renderArenaMenu(arena);
+}
+
+
+function spritesHTML() {
+    return `
+        <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">close</button>
+        <div>
+            <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
+            <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
+        </div>
+    `;
 }
 
 
@@ -60,17 +64,17 @@ function closeArena(event) {
 }
 
 
-function setPlayerHealth(id) {
-    currentPlayerHealth = pokemons[id].stats[0].base_stat;
+function setPlayerHealth() {
+    currentPlayerHealth = pokemons[idPlayer].stats[0].base_stat;
 }
 
 
-function setEnemyHealth(id) {
-    currentEnemyHealth = pokemons[id].stats[0].base_stat;
+function setEnemyHealth() {
+    currentEnemyHealth = pokemons[idEnemy].stats[0].base_stat;
 }
 
 
-function renderArenaMenu(arena, idPlayer, idEnemy) {
+function renderArenaMenu(arena) {
     arena.innerHTML += `
         <div style="display:flex;justify-content:space-between;gap:50px;">
             <div>
@@ -86,19 +90,19 @@ function renderArenaMenu(arena, idPlayer, idEnemy) {
         <span id="attackDescription" style="position:absolute;right:250px;bottom:80px;font-size:smaller;">Choose your attack!</span>
         <div class="move-container">
             <div>
-                <button class="attackbtn" id="attackbtn">attack</button>
+                <button class="attackbtn attackbtn-inactive" id="attackbtn">attack</button>
             </div>
             <div class="move-buttons">
                 <button class="movebtn no-bottombr" id="move1" onclick="lockMove('move1', ${idPlayer})">${pokemons[idPlayer].moves[0].move.name}</button>
-                <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${checkArenaAbility(idPlayer, 1)}</button>
-                <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${checkArenaAbility(idPlayer, 2)}</button>
+                <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${checkArenaAbility(1)}</button>
+                <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${checkArenaAbility(2)}</button>
             </div>
         </div>
     `;
 }
 
 
-function checkArenaAbility(idPlayer, index) {
+function checkArenaAbility(index) {
     if (pokemons[idPlayer].moves[index]) {
         return `${pokemons[idPlayer].moves[index].move.name}`;
     } else {
@@ -107,7 +111,7 @@ function checkArenaAbility(idPlayer, index) {
 }
 
 
-function checkArenaAbilityUrl(idPlayer, index) {
+function checkArenaAbilityUrl(index) {
     if (pokemons[idPlayer].moves[index]) {
         return `${pokemons[idPlayer].moves[index].move.url}`;
     } else {
@@ -116,97 +120,44 @@ function checkArenaAbilityUrl(idPlayer, index) {
 }
 
 
-function lockMove(moveId, idPlayer) {
+function lockMove(moveId) {
     playSound(click);
-    let attackbtn = document.getElementById('attackbtn');
     if (moveId == 'move1') {
         chosenAttackName = pokemons[idPlayer].moves[0].move.name;
-        writeAttackDescription('move');
-        attackbtn.setAttribute('onclick', 'startAttack(18)');
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
         loadMove(pokemons[idPlayer].moves[0].move.url);
     } else if (moveId == 'move2') {
-        chosenAttackName = checkArenaAbility(idPlayer, 1);
-        writeAttackDescription('move');
-        attackbtn.setAttribute('onclick', 'startAttack(18)');
-        loadMove(checkArenaAbilityUrl(idPlayer, 1));
+        chosenAttackName = checkArenaAbility(1);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(1));
     } else if (moveId == 'move3') {
-        chosenAttackName = checkArenaAbility(idPlayer, 2);
-        writeAttackDescription('move');
-        attackbtn.setAttribute('onclick', 'startAttack(18)');
-        loadMove(checkArenaAbilityUrl(idPlayer, 2));
+        chosenAttackName = checkArenaAbility(2);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(2));
     }
 }
 
 
-function writeAttackDescription(type) {
-    let attackDescription = document.getElementById('attackDescription');
-    if (type == "move") {
-        attackDescription.innerHTML = chosenAttackName;
-    } else if (type == "Choose your attack!") {
-        attackDescription.innerHTML = "Choose your attack!";
-    } else {
-        attackDescription.innerHTML = `${pokemons[idPlayer].name} inflicted ${Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100)} dmg`;
-    }
+function activateAttackBtn() {
+    let attackbtn = document.getElementById('attackbtn');
+    attackbtn.classList.remove('attackbtn-inactive');
+    attackbtn.setAttribute('onclick', 'startAttack()');
 }
 
 
-function startAttack() {
-    if (playersTurn) {
-        playSound(attack);
-        let opponent = document.getElementById('opponent');
-        opponent.classList.remove('move-img-left');
-        opponent.classList.remove('move-img-right');
-        playSound(click);
-        currentEnemyHealth -= Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100 * pokemons[idPlayer].stats[1].base_stat / 100);
-        writeAttackDescription('');
-        let enemyHealth = document.getElementById('innerEnemy');
-        let champion = document.getElementById('champion');
-        champion.classList.add('move-img-left');
-        setTimeout(function () {
-            champion.classList.add('move-img-right');
-            if (currentEnemyHealth < 1) {
-                playSound(dead);
-                enemyHealth.setAttribute('style', `width:${0 * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
-                enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
-                opponent.classList.add('turn-img-round');
-                setTimeout(function () {
-                    opponent.classList.add('drop-img-down');
-                }, 225);
-            } else {
-                enemyHealth.setAttribute('style', `width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
-                enemyHealth.innerHTML = `${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}`;
-                visualiseHitEffect(opponent);
-                setTimeout(function () {
-                    champion.classList.remove('move-img-left');
-                    champion.classList.remove('move-img-right');
-                    playersTurn = false;
-                    startEnemyAttack(champion);
-                }, 2000);
-            }
-        }, 1000);
-    } else {
-        playSound(cancel);
+function hightlightMove(moveId) {
+    for (let i = 1; i < 4; i++) {
+        let removeHighlight = document.getElementById("move"+i);
+        removeHighlight.setAttribute('style', 'border: none;')
     }
-}
-
-
-function visualiseHitEffect(pokemon) {
-    pokemon.classList.add('hit');
-    setTimeout(function () {
-        pokemon.classList.remove('hit');
-    },100);
-    setTimeout(function () {
-        pokemon.classList.add('hit');
-    },200);
-    setTimeout(function () {
-        pokemon.classList.remove('hit');
-    },300);
-    setTimeout(function () {
-        pokemon.classList.add('hit');
-    },400);
-    setTimeout(function () {
-        pokemon.classList.remove('hit');
-    },500);
+    let highlightedMove = document.getElementById(moveId);
+    highlightedMove.setAttribute('style', 'border: 2px solid black');
 }
 
 
@@ -215,17 +166,4 @@ async function loadMove(url) {
     let response = await fetch(newUrl);
     move = await response.json();
     chosenAttackDmg = move.power;
-}
-
-
-function startEnemyAttack() {
-    playSound(attack);
-    let opponent = document.getElementById('opponent');
-    opponent.classList.add('move-img-left');
-    setTimeout(function () {
-        opponent.classList.add('move-img-right');
-        visualiseHitEffect(champion);
-        playersTurn = true;
-        writeAttackDescription("Choose your attack!");
-    }, 2000);
 }

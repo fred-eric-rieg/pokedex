@@ -170,6 +170,16 @@ footer {
     bottom:80px;
 }
 
+.attackbtn-inactive {
+    background: #ccc;
+    cursor: default;
+    color: #ccc;
+}
+
+.attackbtn-inactive:hover {
+    background: #ccc !important;
+}
+
 .attackbtn:hover {
     background: rgb(80, 80, 80);
 }

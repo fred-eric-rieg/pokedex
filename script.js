@@ -21,8 +21,8 @@ function loadPokemon(start, end) {
  * Onclick function of loadbtn that loads the remaining pokemon if user clickes on it.
  */
 function loadMore() {
-    let loadbtn = document.getElementById('loadbtn');
     if (ids.length < 22) {
+        let loadbtn = document.getElementById('loadbtn');
         loadbtn.innerHTML = "loading completed";
         pokemons = [];
         ids = [];
@@ -36,9 +36,7 @@ function loadMore() {
 
 
 async function getData() {
-    let canvas = document.getElementById('canvas');
-    canvas.innerHTML = '';
-    canvas.classList.add('d-none');
+    hideCanvas();
     for (let i = 0; i < ids.length; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${ids[i]}/`;
         let response = await fetch(url);
@@ -46,6 +44,19 @@ async function getData() {
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, ids[i]);
     }
+    showCanvas();
+}
+
+
+function hideCanvas() {
+    let canvas = document.getElementById('canvas');
+    canvas.innerHTML = '';
+    canvas.classList.add('d-none');
+}
+
+
+function showCanvas() {
+    let canvas = document.getElementById('canvas');
     canvas.classList.remove('d-none');
 }
 
@@ -59,7 +70,7 @@ function renderPokemon(currentPokemon, id) {
 function templateHTML(currentPokemon, id) {
     return `
         <div class="wrap">
-            <div class="card" id="card${id}" onclick="showMenu(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
+            <div class="card" id="card${id}" onclick="showPokemon(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
                 <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
             </div>
@@ -95,9 +106,8 @@ function changeColor(type, id) {
 }
 
 
-function showMenu(id) {
+function showPokemon(id) {
     playSound(click);
-    pauseSound(cancel);
     playSound(soundtrack);
     let overlay = document.getElementById('overlay');
     overlay.classList.remove('d-none');
@@ -138,7 +148,7 @@ function startFight(event, id) {
     }, 1000);
     playSound(fight);
     setTimeout(function() {
-        createArena(id);
+        openArena(id);
     }, 3000);
 }
 
@@ -181,9 +191,8 @@ function sequenceOfCardEffects(card) {
 function hideOverlayDelayed(event) {
     event.stopPropagation();
     let overlay = document.getElementById('overlay');
-    let miniCanvas = document.getElementById('miniCanvas');
     let arena = document.getElementById('arena');
-    overlayTimeout(overlay, arena, miniCanvas);
+    overlayTimeout(overlay, arena);
     arena.classList.remove('big');
     arena.classList.add('small');
     arena.innerHTML = '';
@@ -192,7 +201,8 @@ function hideOverlayDelayed(event) {
 }
 
 
-function overlayTimeout() {
+function overlayTimeout(overlay, arena) {
+    let miniCanvas = document.getElementById('miniCanvas');
     setTimeout(function() {
         overlay.classList.add('d-none');
         arena.classList.remove('d-flex');
