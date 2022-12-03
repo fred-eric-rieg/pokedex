@@ -83,7 +83,7 @@ function renderArenaMenu(arena, idPlayer, idEnemy) {
                 <div class="stats"><div class="outer"><div class="inner" id="innerEnemy" style="width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;">${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}</div></div></div>
             </div>
         </div>
-        <span id="attackDescription" style="position:absolute;right:120px;bottom:80px;">Choose your attack!</span>
+        <span id="attackDescription" style="position:absolute;right:250px;bottom:80px;font-size:smaller;">Choose your attack!</span>
         <div class="move-container">
             <div>
                 <button class="attackbtn" id="attackbtn">attack</button>
