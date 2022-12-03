@@ -1,26 +1,11 @@
+// Current Pokemon that is fetched from server is stored here (one after another).
 let currentPokemon;
 
+// Collects all pokemon that were fetched.
 let pokemons = [];
 
-// default id
+// Collects ids off all pokemon that were fetched.
 let ids = [];
-
-// All sounds
-let soundtrack = new Audio("sound/background.mp3");
-soundtrack.volume = 0.05;
-let fight = new Audio("sound/fight.mp3");
-fight.volume = 0.05;
-fight.currentTime = 1;
-let click = new Audio('sound/click.wav');
-click.volume = 0.1;
-let spawn = new Audio('sound/spawn.wav');
-spawn.volume = 0.1;
-let cancel = new Audio('sound/cancel.wav');
-cancel.volume = 0.1;
-let attack = new Audio('sound/attack.mp3');
-attack.volume = 0.1;
-let dead = new Audio('sound/dead.mp3');
-dead.volume = 0.1;
 
 
 loadPokemon(1, 20);
@@ -32,18 +17,20 @@ function loadPokemon(start, end) {
     }
 }
 
-
+/**
+ * Onclick function of loadbtn that loads the remaining pokemon if user clickes on it.
+ */
 function loadMore() {
     let loadbtn = document.getElementById('loadbtn');
     if (ids.length < 22) {
         loadbtn.innerHTML = "loading completed";
         pokemons = [];
         ids = [];
-        click.play();
+        playSound(click);
         loadPokemon(1, 150);
         getData();
     } else {
-        cancel.play();
+        playSound(cancel);
     }
 }
 
@@ -109,11 +96,9 @@ function changeColor(type, id) {
 
 
 function showMenu(id) {
-    click.currentTime = 0;
-    click.play();
-    cancel.pause();
-    cancel.currentTime = 0;
-    soundtrack.play();
+    playSound(click);
+    pauseSound(cancel);
+    playSound(soundtrack);
     let overlay = document.getElementById('overlay');
     overlay.classList.remove('d-none');
     let miniCanvas = document.getElementById('miniCanvas');
@@ -146,13 +131,12 @@ function startFight(event, id) {
     let overlay = document.getElementById('overlay');
     overlay.setAttribute('onclick', '');
     event.stopPropagation();
-    click.play();
+    playSound(click);
     startEffects(id);
     setTimeout(function() {
-        soundtrack.pause();
-        soundtrack.currentTime = 0;
+        pauseSound(soundtrack);
     }, 1000);
-    fight.play();
+    playSound(fight);
     setTimeout(function() {
         createArena(id);
     }, 3000);
@@ -203,8 +187,7 @@ function hideOverlayDelayed(event) {
     arena.classList.remove('big');
     arena.classList.add('small');
     arena.innerHTML = '';
-    fight.pause();
-    fight.currentTime = 1;
+    pauseSound(fight);
     overlay.setAttribute('onclick', 'hideOverlay();');
 }
 
@@ -215,8 +198,7 @@ function overlayTimeout() {
         arena.classList.remove('d-flex');
         arena.classList.add('d-none');
         miniCanvas.classList.remove('d-none');
-        cancel.currentTime = 0;
-        cancel.play();
+        playSound(cancel);
     }, 1000);
 }
 

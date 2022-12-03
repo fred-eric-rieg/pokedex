@@ -10,6 +10,13 @@ let playersTurn = true;
 let idEnemy = 18;
 let idPlayer;
 
+/**
+ * Generates a random id and sets idEnemy to this id => random enemy to fight player in arena
+ */
+function getRandomEnemy() {
+    let randomId = Math.floor(Math.random() * 152);
+}
+
 
 function createArena(id) {
     idPlayer = id - 1;
@@ -21,7 +28,7 @@ function createArena(id) {
     setTimeout(function () {
         arena.classList.add('big');
         setTimeout(function () {
-            spawn.play();
+            playSound(spawn);
             placePokoemon(arena, id);
             let overlay = document.getElementById('overlay');
             overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
@@ -48,21 +55,18 @@ function placePokoemon(arena, id) {
 
 
 function closeArena(event) {
-    click.currentTime = 0;
-    click.play();
+    playSound(click);
     hideOverlayDelayed(event);
 }
 
 
 function setPlayerHealth(id) {
     currentPlayerHealth = pokemons[id].stats[0].base_stat;
-    console.log(currentPlayerHealth);
 }
 
 
 function setEnemyHealth(id) {
     currentEnemyHealth = pokemons[id].stats[0].base_stat;
-    console.log(currentEnemyHealth);
 }
 
 
@@ -112,8 +116,7 @@ function checkArenaAbilityUrl(idPlayer, index) {
 
 
 function lockMove(moveId, idPlayer) {
-    click.currentTime = 0;
-    click.play();
+    playSound(click);
     let attackbtn = document.getElementById('attackbtn');
     let description = document.getElementById('description');
     if (moveId == 'move1') {
@@ -137,13 +140,11 @@ function lockMove(moveId, idPlayer) {
 
 function startAttack() {
     if (playersTurn) {
-        attack.currentTime = 0;
-        attack.play();
+        playSound(attack);
         let opponent = document.getElementById('opponent');
         opponent.classList.remove('move-img-left');
         opponent.classList.remove('move-img-right');
-        click.currentTime = 0;
-        click.play();
+        playSound(click);
         currentEnemyHealth -= Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100 * pokemons[idPlayer].stats[1].base_stat / 100);
         console.log("Inflicted dmg: ", Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100))
         let enemyHealth = document.getElementById('innerEnemy');
@@ -152,8 +153,7 @@ function startAttack() {
         setTimeout(function () {
             champion.classList.add('move-img-right');
             if (currentEnemyHealth < 1) {
-                dead.currentTime = 0;
-                dead.play();
+                playSound(dead);
                 enemyHealth.setAttribute('style', `width:${0 * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
                 enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
                 opponent.classList.add('turn-img-round');
@@ -172,8 +172,7 @@ function startAttack() {
             }
         }, 1000);
     } else {
-        cancel.currentTime = 0;
-        cancel.play();
+        playSound(cancel);
     }
 }
 
@@ -195,8 +194,7 @@ async function loadMove(url) {
 
 
 function startEnemyAttack() {
-    attack.currentTime = 0;
-    attack.play();
+    playSound(attack);
     let opponent = document.getElementById('opponent');
     opponent.classList.add('move-img-left');
     setTimeout(function () {
