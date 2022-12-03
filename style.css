@@ -159,6 +159,7 @@ footer {
     border: none;
     cursor: pointer;
     margin-top: 24px;
+    border-radius: 15px;
     align-self: center;
     color: white;
     font-size: larger;
@@ -176,13 +177,11 @@ footer {
 .movebtn {
     border: none;
     cursor: pointer;
-    margin-top: 24px;
-    align-self: center;
     color: white;
-    font-size: larger;
+    border-radius: 15px;
     background: rgb(170, 90, 90);
     width: 150px;
-    height: 50px;
+    height: 25px;
 }
 
 .movebtn:hover {
@@ -193,10 +192,28 @@ footer {
     border: 2px solid black; 
 }
 
+.no-br {
+    border-radius: 0;
+}
+
+.no-topbr {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.no-bottombr {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .move-container {
     position: absolute;
     bottom: 60px;
     left: 200px;
+    display: flex;
+}
+
+.move-buttons {
     display: flex;
     flex-direction: column;
 }

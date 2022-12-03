@@ -17,8 +17,12 @@ dead.volume = 0.1;
 
 
 function playSound(name) {
-    name.currentTime = 0;
-    name.play();
+    if (name == soundtrack) {
+        name.play();
+    } else {
+        name.currentTime = 0;
+        name.play();
+    }
 }
 
 
