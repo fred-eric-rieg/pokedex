@@ -220,3 +220,7 @@ footer {
     transform: translateY(500px);
     transition: all 300ms ease-in;
 }
+
+.hit {
+    filter: opacity(50%);
+}

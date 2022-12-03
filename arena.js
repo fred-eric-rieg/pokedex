@@ -163,17 +163,38 @@ function startAttack() {
             } else {
                 enemyHealth.setAttribute('style', `width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
                 enemyHealth.innerHTML = `${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}`;
+                visualiseHitEffect(opponent);
                 setTimeout(function () {
                     champion.classList.remove('move-img-left');
                     champion.classList.remove('move-img-right');
                     playersTurn = false;
-                    startEnemyAttack();
+                    startEnemyAttack(champion);
                 }, 2000);
             }
         }, 1000);
     } else {
         playSound(cancel);
     }
+}
+
+
+function visualiseHitEffect(pokemon) {
+    pokemon.classList.add('hit');
+    setTimeout(function () {
+        pokemon.classList.remove('hit');
+    },100);
+    setTimeout(function () {
+        pokemon.classList.add('hit');
+    },200);
+    setTimeout(function () {
+        pokemon.classList.remove('hit');
+    },300);
+    setTimeout(function () {
+        pokemon.classList.add('hit');
+    },400);
+    setTimeout(function () {
+        pokemon.classList.remove('hit');
+    },500);
 }
 
 
@@ -199,6 +220,7 @@ function startEnemyAttack() {
     opponent.classList.add('move-img-left');
     setTimeout(function () {
         opponent.classList.add('move-img-right');
+        visualiseHitEffect(champion);
         playersTurn = true;
     }, 2000);
 }
