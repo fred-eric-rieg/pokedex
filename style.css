@@ -251,3 +251,35 @@ footer {
 .hit {
     filter: opacity(50%);
 }
+
+.searchbar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.searchbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    height: 32px;
+    padding: 8px;
+    border-radius: 15px;
+}
+
+#searchbar {
+    height: 30px;
+    width: 200px;
+    margin-right: 8px;
+    border: none;
+    outline: none;
+}
+
+#cancelSearch {
+    background: white;
+    border-radius: 15px;
+    height: 30px;
+    width: 30px;
+}

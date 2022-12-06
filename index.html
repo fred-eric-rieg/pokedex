@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cards.css">
     <script src="script.js"></script>
+    <script src="search.js"></script>
     <script src="sounds.js"></script>
     <script src="arena.js"></script>
     <script src="fight.js"></script>
 </head>
 <body onload="getData()">
     
-    <h1 style="padding-left:50px;padding-top:50px;margin-left:60px;">Pokedex</h1>
+    <h1 style="padding-left:50px;padding-top:50px;margin-left:60px;">Pokédex</h1>
+    <div class="searchbar-wrap"><div class="searchbar"><input id="searchbar" type="text" placeholder="Search a Pokemon..." onkeydown="search()"><button id="cancelSearch" onclick="clearSearch()">X</button></div></div>
 
     <div class="overlay d-none" id="overlay" onclick="hideOverlay(event)">
         <div class="mini-canvas" id="miniCanvas" onclick="maintainOverlay(event)">
