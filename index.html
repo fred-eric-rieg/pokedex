@@ -16,7 +16,7 @@
 <body onload="getData()">
     
     <h1 style="padding-left:50px;padding-top:50px;margin-left:60px;">Pokédex</h1>
-    <div class="searchbar-wrap"><div class="searchbar"><input id="searchbar" type="text" placeholder="Search a Pokemon..." onkeydown="search()"><button id="cancelSearch" onclick="clearSearch()">X</button></div></div>
+    <div class="searchbar-wrap"><div class="searchbar"><input id="searchbar" type="text" placeholder="Search a Pokemon..." onkeyup="search()"><button id="cancelSearch" onclick="clearSearch()">X</button></div></div>
 
     <div class="overlay d-none" id="overlay" onclick="hideOverlay(event)">
         <div class="mini-canvas" id="miniCanvas" onclick="maintainOverlay(event)">

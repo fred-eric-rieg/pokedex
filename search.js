@@ -12,20 +12,27 @@ function search() {
 
 
 function compareUserInput(userInput) {
-    for (let i = 0; i < pokemons.length; i++) {
-        if (pokemons[i].name.includes(userInput)) {
-            searchResults.push(pokemons[i]);
-            searchIds.push(i);
-        }
+    for (let i = 0; i < pokemons.length; i++) comparePokemons(userInput, i);
+    if (searchResults.length == 0) resetSearchbar();
+    else renderFoundPokemons(canvas);
+}
+
+
+function comparePokemons(userInput, i) {
+    if (pokemons[i].name.includes(userInput)) {
+        searchResults.push(pokemons[i]);
+        searchIds.push(i);
     }
-    if (searchResults.length == 0) {
-        let canvas = document.getElementById('canvas');
-        canvas.innerHTML = '';
-        canvas.innerHTML = "<span style='color:white';>No Pokemon found!</span>";
-        renderAllTimeout();
-    } else {
-        renderFoundPokemons(canvas);
-    }
+}
+
+
+function resetSearchbar() {
+    let canvas = document.getElementById('canvas');
+    let searchbar = document.getElementById('searchbar');
+    canvas.innerHTML = '';
+    canvas.innerHTML = `<span style='color:white';>No Pokemon found for '${searchbar.value}'!</span>`;
+    searchbar.value = '';
+    renderAllTimeout();
 }
 
 
@@ -50,9 +57,7 @@ function renderAllTimeout() {
 
 function renderAllNoTimeout() {
     canvas.innerHTML = '';
-    for (let i = 0; i < pokemons.length; i++) {
-        renderPokemon(pokemons[i], ids[i]);
-    }
+    for (let i = 0; i < pokemons.length; i++) renderPokemon(pokemons[i], ids[i]);
 }
 
 
