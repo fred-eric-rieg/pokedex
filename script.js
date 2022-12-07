@@ -64,6 +64,7 @@ function showCanvas() {
 function renderPokemon(currentPokemon, id) {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML += templateHTML(currentPokemon, id);
+    changeTypeColor(currentPokemon, id);
 }
 
 
@@ -73,6 +74,7 @@ function templateHTML(currentPokemon, id) {
             <div class="card" id="card${id}" onclick="showPokemon(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
                 <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
+                <div class="type" id="types${id}">${currentPokemon.types[0].type.name.toUpperCase()}</div>
             </div>
         </div>
     `;
@@ -88,21 +90,26 @@ function checkAbility(currentPokemon, index) {
 }
 
 
+function changeTypeColor(currentPokemon, id) {
+        let typeName = currentPokemon.types[0].type.name;
+        let type = document.getElementById(`types${id}`);
+        if      (typeName == "grass")   type.style.background = 'lightgreen';
+        else if (typeName == "fire")    type.style.background = 'lightcoral';
+        else if (typeName == "water")   type.style.background = 'lightskyblue';
+        else if (typeName == "wind")    type.style.background = 'lightskyblue';
+        else if (typeName == "normal")  type.style.background = '#ccc';
+        else if (typeName == "bug")     type.style.background = 'burlywood';
+}
+
+
 function changeColor(type, id) {
     let card = document.getElementById(`card${id}`);
-    if (type == "grass") {
-        card.classList.add('green-card');
-    } else if (type == "fire") {
-        card.classList.add('red-card');
-    } else if (type == "water") {
-        card.classList.add('blue-card');
-    } else if (type == "wind") {
-        card.classList.add('blue-card');
-    } else if (type == "normal") {
-        card.classList.add('grey-card');
-    } else if (type == "bug") {
-        card.classList.add('brown-card');
-    }
+    if      (type == "grass")   card.classList.add('green-card');
+    else if (type == "fire")    card.classList.add('red-card');
+    else if (type == "water")   card.classList.add('blue-card');
+    else if (type == "wind")    card.classList.add('blue-card');
+    else if (type == "normal")  card.classList.add('grey-card');
+    else if (type == "bug")     card.classList.add('brown-card');
 }
 
 
@@ -120,10 +127,10 @@ function showPokemon(id) {
 function renderSinglePokemon(id) {
     return `
         <div class="wrap-nohover">
-            <div class="card-nohover" id="card${id}" onclick="showMenu(${id})">
+            <div class="card-nohover" id="card${id}">
                 <div style="display:flex;justify-content:space-between;">
                     <span>#${id}<br><b>${pokemons[id-1].name.toUpperCase()}</b></span>
-                    <button class="btn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
+                    <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
                 <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.front_default}">
                 <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[0].base_stat}px;">${pokemons[id-1].stats[0].base_stat}/100</div></div></div>
@@ -140,6 +147,8 @@ function renderSinglePokemon(id) {
 function startFight(event, id) {
     let overlay = document.getElementById('overlay');
     overlay.setAttribute('onclick', '');
+    let closebtn = document.getElementById('closebtn')
+    closebtn.setAttribute('onclick', '');
     event.stopPropagation();
     playSound(click);
     startEffects(id);
@@ -219,6 +228,8 @@ function hideOverlay(event) {
     let miniCanvas = document.getElementById('miniCanvas');
     overlay.classList.add('d-none');
     miniCanvas.classList.remove('d-none');
+    let closebtn = document.getElementById('closebtn');
+    closebtn.setAttribute('onclick', 'closeArena(event)');
     cancel.currentTime = 0;
     cancel.play();
 }

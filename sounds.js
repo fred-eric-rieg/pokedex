@@ -15,6 +15,9 @@ attack.volume = 0.1;
 let dead = new Audio('sound/dead.mp3');
 dead.volume = 0.1;
 
+// on/off for sound muting
+let mute = false;
+
 
 function playSound(name) {
     if (name == soundtrack) {
@@ -29,4 +32,20 @@ function playSound(name) {
 function pauseSound(name) {
     name.currentTime = 0;
     name.pause();
+}
+
+
+function muteSoundtrack() {
+    let mutebtn = document.getElementById('mutebtn');
+    if (!mute) {
+        mute = true;
+        soundtrack.volume = 0;
+        fight.volume = 0;
+        mutebtn.innerHTML = 'play music';
+    } else {
+        mute = false;
+        soundtrack.volume = 0.05;
+        fight.volume = 0.05;
+        mutebtn.innerHTML = 'no music';
+    }
 }

@@ -70,19 +70,19 @@ function updateHealthpoints(id, status) {
     let enemyHealth = document.getElementById('innerEnemy');
     let playerHealth = document.getElementById('innerPlayer');
     if (id == idEnemy & status == "dead") {
-        enemyHealth.setAttribute('style', `width:${0 * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
+        enemyHealth.setAttribute('style', `width:0px;`);
         enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
     }
     if (id == idEnemy & status == "alive") {
-        enemyHealth.setAttribute('style', `width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;`);
+        enemyHealth.setAttribute('style', `width:${Math.floor(currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat)}px;`);
         enemyHealth.innerHTML = `${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}`;
     }
     if (id == idPlayer & status == "dead") {
-        playerHealth.setAttribute('style', `width:${0 * 100 / pokemons[idPlayer].stats[0].base_stat}px;`);
+        playerHealth.setAttribute('style', `width:0px;`);
         playerHealth.innerHTML = `0/${pokemons[idPlayer].stats[0].base_stat}`;
     }
     if (id == idPlayer & status == "alive") {
-        playerHealth.setAttribute('style', `width:${currentPlayerHealth * 100 / pokemons[idPlayer].stats[0].base_stat}px;`);
+        playerHealth.setAttribute('style', `width:${Math.floor(currentPlayerHealth * 100 / pokemons[idPlayer].stats[0].base_stat)}px;`);
         playerHealth.innerHTML = `${currentPlayerHealth}/${pokemons[idPlayer].stats[0].base_stat}`;
     }
 }
@@ -153,12 +153,15 @@ function visualiseHitEffect(pokemon) {
 function startEnemyAttack() {
     playSound(attack);
     visualiseAttackEffect(idEnemy);
+    chooseEnemyAttack();
     setTimeout(function () {
         visualiseHitEffect(champion);
-        chooseEnemyAttack();
         writeAttackDescription("move", idEnemy);
         // DMG by enemy is applied here
         currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg * pokemons[idPlayer].stats[2].base_stat / 100 * pokemons[idEnemy].stats[1].base_stat / 100);
+        console.log("damage applied:", Math.floor(chosenEnemyAttackDmg * pokemons[idPlayer].stats[2].base_stat / 100 * pokemons[idEnemy].stats[1].base_stat / 100))
+        console.log("this is current player health:", currentPlayerHealth);
+        console.log("enemy ap: ", chosenEnemyAttackDmg, " player def: ",pokemons[idPlayer].stats[2].base_stat, " enemy attack value: ", pokemons[idEnemy].stats[1].base_stat);
         setTimeout(function () {
             writeAttackDescription("", idEnemy);
         }, 1000);
