@@ -5,7 +5,6 @@ let idPlayer;
  * Generates a random id and sets idEnemy to this id => random enemy to fight player in arena
  */
 function getRandomEnemy() {
-    console.log("number of pokemons loaded: ", pokemons.length)
     if (pokemons.length < 22) {
         let randomId = Math.floor(Math.random() * 21);
         idEnemy = randomId;
@@ -38,6 +37,7 @@ function openArena(id) {
 function placePokoemon(arena) {
     getRandomEnemy();
     arena.innerHTML = '';
+    playersTurn = true;
     setTimeout(function () {
         arena.innerHTML += spritesHTML();
     }, 600);
@@ -121,30 +121,6 @@ function checkArenaAbilityUrl(index) {
 }
 
 
-function lockMove(moveId) {
-    playSound(click);
-    if (moveId == 'move1') {
-        chosenAttackName = pokemons[idPlayer].moves[0].move.name;
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(pokemons[idPlayer].moves[0].move.url);
-    } else if (moveId == 'move2') {
-        chosenAttackName = checkArenaAbility(1);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(1));
-    } else if (moveId == 'move3') {
-        chosenAttackName = checkArenaAbility(2);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(2));
-    }
-}
-
-
 function activateAttackBtn() {
     let attackbtn = document.getElementById('attackbtn');
     attackbtn.classList.remove('attackbtn-inactive');
@@ -159,12 +135,4 @@ function hightlightMove(moveId) {
     }
     let highlightedMove = document.getElementById(moveId);
     highlightedMove.setAttribute('style', 'border: 2px solid black');
-}
-
-
-async function loadMove(url) {
-    let newUrl = url;
-    let response = await fetch(newUrl);
-    move = await response.json();
-    chosenAttackDmg = move.power;
 }

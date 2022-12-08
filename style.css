@@ -306,3 +306,7 @@ footer {
     height: 40px;
     cursor: pointer;
 }
+
+.winner {
+    background-image: url(img/winner.png);
+}

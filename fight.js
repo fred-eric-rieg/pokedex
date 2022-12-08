@@ -9,7 +9,9 @@ let chosenEnemyAttackDmg = 0;
 
 let playersTurn = true;
 
-
+/**
+ * Triggered when player clicks the attach-btn
+ */
 function startAttack() {
     if (playersTurn) {
         deactivateAttackBtn();
@@ -20,10 +22,37 @@ function startAttack() {
         writeAttackDescription('', idPlayer);
         visualiseAttackEffect(idPlayer);
         setTimeout(function () {
-            checkIfDead(idEnemy);  
+            checkIfDead(idEnemy);
         }, 1000);
     } else {
         playSound(cancel);
+    }
+}
+
+/**
+ * Players attacks handled here (red little menu where player has to first choose one of three attacks,
+ * then the attack-btn is activated.
+ */
+function lockMove(moveId) {
+    playSound(click);
+    if (moveId == 'move1') {
+        chosenAttackName = pokemons[idPlayer].moves[0].move.name;
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(pokemons[idPlayer].moves[0].move.url, "player");
+    } else if (moveId == 'move2') {
+        chosenAttackName = checkArenaAbility(1);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(1), "player");
+    } else if (moveId == 'move3') {
+        chosenAttackName = checkArenaAbility(2);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(2), "player");
     }
 }
 
@@ -41,6 +70,11 @@ function checkIfDead(id) {
             playSound(dead);
             updateHealthpoints(idEnemy, "dead");
             visualiseDeath(idEnemy);
+            displayWinner();
+            setTimeout(function () {
+                closeArena();
+                hideWinner();
+            }, 2000);
         } else {
             updateHealthpoints(idEnemy, "alive");
             visualiseHitEffect(opponent);
@@ -54,6 +88,9 @@ function checkIfDead(id) {
             playSound(dead);
             updateHealthpoints(idPlayer, "dead");
             visualiseDeath(idPlayer);
+            setTimeout(function () {
+                closeArena();
+            }, 2000);
         } else {
             updateHealthpoints(idPlayer, "alive");
             visualiseHitEffect(champion);
@@ -158,10 +195,9 @@ function startEnemyAttack() {
         visualiseHitEffect(champion);
         writeAttackDescription("move", idEnemy);
         // DMG by enemy is applied here
-        currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg * pokemons[idPlayer].stats[2].base_stat / 100 * pokemons[idEnemy].stats[1].base_stat / 100);
-        console.log("damage applied:", Math.floor(chosenEnemyAttackDmg * pokemons[idPlayer].stats[2].base_stat / 100 * pokemons[idEnemy].stats[1].base_stat / 100))
-        console.log("this is current player health:", currentPlayerHealth);
-        console.log("enemy ap: ", chosenEnemyAttackDmg, " player def: ",pokemons[idPlayer].stats[2].base_stat, " enemy attack value: ", pokemons[idEnemy].stats[1].base_stat);
+        currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg
+            * pokemons[idPlayer].stats[2].base_stat / 100
+            * pokemons[idEnemy].stats[1].base_stat / 100);
         setTimeout(function () {
             writeAttackDescription("", idEnemy);
         }, 1000);
@@ -181,7 +217,7 @@ async function loadMoveEnemy(url) {
     let newUrl = url;
     let response = await fetch(newUrl);
     move = await response.json();
-    chosenEnemyAttackDmg =  move.power;
+    chosenEnemyAttackDmg = move.power;
 }
 
 
@@ -195,13 +231,42 @@ function writeAttackDescription(type, id) {
             chosenAttackName = '';
             chosenAttackDmg = 0;
         } else {
-            attackDescription.innerHTML = `${pokemons[idPlayer].name} inflicted ${Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100 * pokemons[idPlayer].stats[1].base_stat / 100)} dmg`;
+            attackDescription.innerHTML = `
+                ${pokemons[idPlayer].name} inflicted ${Math.floor(chosenAttackDmg
+                    * pokemons[idEnemy].stats[2].base_stat / 100
+                    * pokemons[idPlayer].stats[1].base_stat / 100)} dmg
+                `;
         }
     } else {
         if (type == "move") {
             attackDescription.innerHTML = `${pokemons[idEnemy].name} chooses ${chosenEnemyAttackName}`;
         } else {
-            attackDescription.innerHTML = `${pokemons[idEnemy].name} inflicted ${Math.floor(chosenEnemyAttackDmg * pokemons[idPlayer].stats[2].base_stat / 100 * pokemons[idEnemy].stats[1].base_stat / 100)} dmg`;
+            attackDescription.innerHTML = `
+                ${pokemons[idEnemy].name} inflicted ${Math.floor(chosenEnemyAttackDmg
+                    * pokemons[idPlayer].stats[2].base_stat / 100
+                    * pokemons[idEnemy].stats[1].base_stat / 100)} dmg
+                `;
         }
     }
+}
+
+
+async function loadMove(url, who) {
+    let newUrl = url;
+    let response = await fetch(newUrl);
+    move = await response.json();
+    chosenAttackDmg = move.power;
+    if (who == "player") activateAttackBtn();
+}
+
+
+function displayWinner() {
+    let arena = document.getElementById('arena');
+    arena.classList.add('winner');
+}
+
+
+function hideWinner() {
+    let arena = document.getElementById('arena');
+    arena.classList.remove('winner');
 }

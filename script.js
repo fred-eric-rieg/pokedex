@@ -198,7 +198,7 @@ function sequenceOfCardEffects(card) {
 
 
 function hideOverlayDelayed(event) {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     let overlay = document.getElementById('overlay');
     let arena = document.getElementById('arena');
     overlayTimeout(overlay, arena);
