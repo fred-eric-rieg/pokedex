@@ -25,6 +25,10 @@
         <div class="mute"><button class="mutebtn" id="mutebtn" onclick="muteSoundtrack()">no music</button></div>
     </div>
 
+    <div class="loading d-none" id="loading">
+        <div class="ring"></div>
+        <span id="loadtext">loading...</span>
+    </div>
 
     <div class="overlay d-none" id="overlay" onclick="hideOverlay(event)">
         <div class="mini-canvas" id="miniCanvas" onclick="maintainOverlay(event)">

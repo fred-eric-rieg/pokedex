@@ -102,7 +102,7 @@ footer {
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 .d-flex {
@@ -309,4 +309,55 @@ footer {
 
 .winner {
     background-image: url(img/winner.png);
+}
+
+.loading {
+    z-index: 99;
+    background: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loadtext {
+    color: white;
+}
+
+.ring {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    animation: ring 2s infinite;
+}
+
+@keyframes ring {
+    0%{
+        transform: rotate(0deg);
+        box-shadow: 1px 5px 2px #e65c00;
+    }
+    50%{
+        transform: rotate(180deg);
+        box-shadow: 1px 5px 2px #18b201;
+    }
+    100%{
+        transform: rotate(360deg);
+        box-shadow: 1px 5px 2px #0456c8;
+    }
+}
+
+.ring::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }

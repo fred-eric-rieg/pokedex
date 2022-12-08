@@ -37,6 +37,7 @@ function loadMore() {
 
 async function getData() {
     hideCanvas();
+    showLoading();
     for (let i = 0; i < ids.length; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${ids[i]}/`;
         let response = await fetch(url);
@@ -44,7 +45,20 @@ async function getData() {
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, ids[i]);
     }
+    hideLoading();
     showCanvas();
+}
+
+
+function showLoading() {
+    let loading = document.getElementById('loading');
+    loading.classList.remove('d-none');
+}
+
+
+function hideLoading() {
+    let loading = document.getElementById('loading');
+    loading.classList.add('d-none');
 }
 
 
