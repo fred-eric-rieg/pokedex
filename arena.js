@@ -49,8 +49,7 @@ function placePokoemon(arena) {
 
 function spritesHTML() {
     return `
-        <button class="btn" style="position:absolute;top:60px;" onclick="closeArena(event)">close</button>
-        <div>
+        <div style="position:relative;top:-120px;">
             <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
             <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
         </div>
@@ -77,6 +76,7 @@ function setEnemyHealth() {
 
 function renderArenaMenu(arena) {
     arena.innerHTML += `
+        <button class="btn" style="position:relative;top:-100px;" onclick="closeArena(event)">close</button>
         <div style="display:flex;justify-content:space-between;gap:50px;">
             <div>
                 ${pokemons[idPlayer].name} hp
@@ -88,15 +88,19 @@ function renderArenaMenu(arena) {
                 <div class="stats"><div class="outer"><div class="inner" id="innerEnemy" style="width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;">${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}</div></div></div>
             </div>
         </div>
-        <span id="attackDescription" style="position:absolute;right:250px;bottom:80px;font-size:smaller;">Choose your attack!</span>
+        
         <div class="move-container">
-            <div>
-                <button class="attackbtn attackbtn-inactive" id="attackbtn">attack</button>
+            <div class="arena-menu-left">
+                <div class="move-buttons">
+                    <button class="attackbtn attackbtn-inactive no-bottombr" id="attackbtn">attack</button>
+                    <button class="movebtn no-br" id="move1" onclick="lockMove('move1', ${idPlayer})">${pokemons[idPlayer].moves[0].move.name}</button>
+                    <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${checkArenaAbility(1)}</button>
+                    <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${checkArenaAbility(2)}</button>
+                </div>
             </div>
-            <div class="move-buttons">
-                <button class="movebtn no-bottombr" id="move1" onclick="lockMove('move1', ${idPlayer})">${pokemons[idPlayer].moves[0].move.name}</button>
-                <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${checkArenaAbility(1)}</button>
-                <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${checkArenaAbility(2)}</button>
+            <div class="arena-menu-right">
+                
+                <p id="attackDescription">Choose your attack!</p>
             </div>
         </div>
     `;
