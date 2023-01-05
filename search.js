@@ -1,7 +1,9 @@
 let searchResults = [];
 let searchIds = [];
 
-
+/**
+ * Overall search function that is called by typing into searchbar "onkeyup"
+ */
 function search() {
     searchResults = [];
     searchIds = [];
@@ -10,14 +12,21 @@ function search() {
     compareUserInput(userInput);
 }
 
-
+/**
+ * Compares user-input to pokemons array. resets searchbar if no match, else calls render function
+ * @param {*} userInput as string
+ */
 function compareUserInput(userInput) {
     for (let i = 0; i < pokemons.length; i++) comparePokemons(userInput, i);
     if (searchResults.length == 0) resetSearchbar();
     else renderFoundPokemons(canvas);
 }
 
-
+/**
+ * Help function that actually compares by include-search of user-input
+ * @param {*} userInput as string
+ * @param {*} i as integer
+ */
 function comparePokemons(userInput, i) {
     if (pokemons[i].name.includes(userInput)) {
         searchResults.push(pokemons[i]);
@@ -25,7 +34,9 @@ function comparePokemons(userInput, i) {
     }
 }
 
-
+/**
+ * Resets searchbar and gives user feedback on his search. Calls a timeout render function.
+ */
 function resetSearchbar() {
     let canvas = document.getElementById('canvas');
     let searchbar = document.getElementById('searchbar');
@@ -35,7 +46,9 @@ function resetSearchbar() {
     renderAllTimeout();
 }
 
-
+/**
+ * Immedeately renders all found pokemons from searchResults
+ */
 function renderFoundPokemons() {
     canvas.innerHTML = '';
     for (let i = 0; i < searchResults.length; i++) {
@@ -43,7 +56,9 @@ function renderFoundPokemons() {
     }
 }
 
-
+/**
+ * A special render function with a timeout that is called by resetSearchbar()
+ */
 function renderAllTimeout() {
     let canvas = document.getElementById('canvas');
     setTimeout(function () {
@@ -54,13 +69,17 @@ function renderAllTimeout() {
     }, 2000);
 }
 
-
+/**
+ * Renders without a timeout that is only called by clearSearch()
+ */
 function renderAllNoTimeout() {
     canvas.innerHTML = '';
     for (let i = 0; i < pokemons.length; i++) renderPokemon(pokemons[i], ids[i]);
 }
 
-
+/**
+ * Clears the searchbar and immediately renders (without timeout)
+ */
 function clearSearch() {
     let searchbar = document.getElementById('searchbar');
     searchbar.value = '';

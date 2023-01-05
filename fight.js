@@ -56,14 +56,19 @@ function lockMove(moveId) {
     }
 }
 
-
+/**
+ * 
+ */
 function deactivateAttackBtn() {
     let attackbtn = document.getElementById('attackbtn');
     attackbtn.classList.add('attackbtn-inactive');
     attackbtn.removeAttribute('onclick', 'startAttack()');
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function checkIfDead(id) {
     if (id == idEnemy) {
         if (currentEnemyHealth < 1) {
@@ -102,7 +107,11 @@ function checkIfDead(id) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ * @param {*} status 
+ */
 function updateHealthpoints(id, status) {
     let enemyHealth = document.getElementById('innerEnemy');
     let playerHealth = document.getElementById('innerPlayer');
@@ -124,7 +133,10 @@ function updateHealthpoints(id, status) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function visualiseDeath(id) {
     if (id == idEnemy) {
         let opponent = document.getElementById('opponent');
@@ -141,7 +153,10 @@ function visualiseDeath(id) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function visualiseAttackEffect(id) {
     let opponent = document.getElementById('opponent');
     let champion = document.getElementById('champion');
@@ -170,7 +185,10 @@ function visualiseAttackEffect(id) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} pokemon 
+ */
 function visualiseHitEffect(pokemon) {
     pokemon.classList.add('hit');
     for (let i = 1; i < 6; i++) {
@@ -186,7 +204,9 @@ function visualiseHitEffect(pokemon) {
     }
 }
 
-
+/**
+ * 
+ */
 function startEnemyAttack() {
     playSound(attack);
     visualiseAttackEffect(idEnemy);
@@ -205,14 +225,19 @@ function startEnemyAttack() {
     }, 1000);
 }
 
-
+/**
+ * 
+ */
 function chooseEnemyAttack() {
     randomIndex = Math.floor(Math.random() * 3);
     chosenEnemyAttackName = pokemons[idEnemy].moves[randomIndex].move.name;
     loadMoveEnemy(pokemons[idEnemy].moves[randomIndex].move.url);
 }
 
-
+/**
+ * 
+ * @param {*} url 
+ */
 async function loadMoveEnemy(url) {
     let newUrl = url;
     let response = await fetch(newUrl);
@@ -220,7 +245,11 @@ async function loadMoveEnemy(url) {
     chosenEnemyAttackDmg = move.power;
 }
 
-
+/**
+ * 
+ * @param {*} type 
+ * @param {*} id 
+ */
 function writeAttackDescription(type, id) {
     let attackDescription = document.getElementById('attackDescription');
     if (id == idPlayer) {
@@ -250,7 +279,11 @@ function writeAttackDescription(type, id) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} url 
+ * @param {*} who 
+ */
 async function loadMove(url, who) {
     let newUrl = url;
     let response = await fetch(newUrl);
@@ -259,13 +292,17 @@ async function loadMove(url, who) {
     if (who == "player") activateAttackBtn();
 }
 
-
+/**
+ * 
+ */
 function displayWinner() {
     let arena = document.getElementById('arena');
     arena.classList.add('winner');
 }
 
-
+/**
+ * 
+ */
 function hideWinner() {
     let arena = document.getElementById('arena');
     arena.classList.remove('winner');

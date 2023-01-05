@@ -1,3 +1,6 @@
+// Hier kann auf jeden Fall mit Klassen gearbeitet werden
+// Sowohl Spielerpokemon als auch Gegnerpokemon sind Objekte der gleichen Klasse
+
 // Current Pokemon that is fetched from server is stored here (one after another).
 let currentPokemon;
 
@@ -10,7 +13,11 @@ let ids = [];
 
 loadPokemon(1, 20);
 
-
+/**
+ * 
+ * @param {*} start 
+ * @param {*} end 
+ */
 function loadPokemon(start, end) {
     for (i = start; i < end+2; i++) {
         ids.push(i);
@@ -34,7 +41,9 @@ function loadMore() {
     }
 }
 
-
+/**
+ * 
+ */
 async function getData() {
     hideCanvas();
     showLoading();
@@ -49,39 +58,56 @@ async function getData() {
     showCanvas();
 }
 
-
+/**
+ * 
+ */
 function showLoading() {
     let loading = document.getElementById('loading');
     loading.classList.remove('d-none');
 }
 
-
+/**
+ * 
+ */
 function hideLoading() {
     let loading = document.getElementById('loading');
     loading.classList.add('d-none');
 }
 
-
+/**
+ * 
+ */
 function hideCanvas() {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML = '';
     canvas.classList.add('d-none');
 }
 
-
+/**
+ * 
+ */
 function showCanvas() {
     let canvas = document.getElementById('canvas');
     canvas.classList.remove('d-none');
 }
 
-
+/**
+ * 
+ * @param {*} currentPokemon 
+ * @param {*} id 
+ */
 function renderPokemon(currentPokemon, id) {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML += templateHTML(currentPokemon, id);
     changeTypeColor(currentPokemon, id);
 }
 
-
+/**
+ * 
+ * @param {*} currentPokemon 
+ * @param {*} id 
+ * @returns 
+ */
 function templateHTML(currentPokemon, id) {
     return `
         <div class="wrap">
@@ -94,7 +120,12 @@ function templateHTML(currentPokemon, id) {
     `;
 }
 
-
+/**
+ * 
+ * @param {*} currentPokemon 
+ * @param {*} index 
+ * @returns 
+ */
 function checkAbility(currentPokemon, index) {
     if (currentPokemon.moves[index]) {
         return `${currentPokemon.moves[index].move.name}`;
@@ -103,7 +134,11 @@ function checkAbility(currentPokemon, index) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} currentPokemon 
+ * @param {*} id 
+ */
 function changeTypeColor(currentPokemon, id) {
         let typeName = currentPokemon.types[0].type.name;
         let type = document.getElementById(`types${id}`);
@@ -115,7 +150,11 @@ function changeTypeColor(currentPokemon, id) {
         else if (typeName == "bug")     type.style.background = 'burlywood';
 }
 
-
+/**
+ * 
+ * @param {*} type 
+ * @param {*} id 
+ */
 function changeColor(type, id) {
     let card = document.getElementById(`card${id}`);
     if      (type == "grass")   card.classList.add('green-card');
@@ -126,7 +165,10 @@ function changeColor(type, id) {
     else if (type == "bug")     card.classList.add('brown-card');
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function showPokemon(id) {
     playSound(click);
     playSound(soundtrack);
@@ -137,7 +179,11 @@ function showPokemon(id) {
     miniCanvas.innerHTML = renderSinglePokemon(id);;
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ * @returns 
+ */
 function renderSinglePokemon(id) {
     return `
         <div class="wrap-nohover">
@@ -157,7 +203,11 @@ function renderSinglePokemon(id) {
     `;
 }
 
-
+/**
+ * 
+ * @param {*} event 
+ * @param {*} id 
+ */
 function startFight(event, id) {
     let overlay = document.getElementById('overlay');
     overlay.setAttribute('onclick', '');
@@ -175,7 +225,10 @@ function startFight(event, id) {
     }, 3000);
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function startEffects(id) {
     let card = document.getElementById(`card${id}`);
     sequenceOfCardEffects(card);
@@ -183,7 +236,10 @@ function startEffects(id) {
     image.classList.add('rotate');
 }
 
-
+/**
+ * 
+ * @param {*} card 
+ */
 function sequenceOfCardEffects(card) {
     setTimeout(function() {
         card.classList.add('green');
@@ -210,7 +266,10 @@ function sequenceOfCardEffects(card) {
     card.classList.add('border-green');
 }
 
-
+/**
+ * 
+ * @param {*} event 
+ */
 function hideOverlayDelayed(event) {
     if (event) event.stopPropagation();
     let overlay = document.getElementById('overlay');
@@ -223,7 +282,11 @@ function hideOverlayDelayed(event) {
     overlay.setAttribute('onclick', 'hideOverlay();');
 }
 
-
+/**
+ * 
+ * @param {*} overlay 
+ * @param {*} arena 
+ */
 function overlayTimeout(overlay, arena) {
     let miniCanvas = document.getElementById('miniCanvas');
     setTimeout(function() {
@@ -235,7 +298,10 @@ function overlayTimeout(overlay, arena) {
     }, 1000);
 }
 
-
+/**
+ * 
+ * @param {*} event 
+ */
 function hideOverlay(event) {
     event.stopPropagation();
     let overlay = document.getElementById('overlay');
@@ -248,7 +314,10 @@ function hideOverlay(event) {
     cancel.play();
 }
 
-
+/**
+ * 
+ * @param {*} event 
+ */
 function maintainOverlay(event) {
     event.stopPropagation();
 }

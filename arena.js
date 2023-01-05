@@ -1,3 +1,6 @@
+// Selbst die Arena ist eine Klasse mit festen Werten, die immer wieder als Instanz aufgerufen werden könnte
+// TODO: Dokumentation
+
 let idEnemy;
 let idPlayer;
 
@@ -14,7 +17,10 @@ function getRandomEnemy() {
     }
 }
 
-
+/**
+ * 
+ * @param {*} id 
+ */
 function openArena(id) {
     idPlayer = id - 1;
     let miniCanvas = document.getElementById('miniCanvas');
@@ -33,7 +39,10 @@ function openArena(id) {
     }, 1000);
 }
 
-
+/**
+ * 
+ * @param {*} arena 
+ */
 function placePokoemon(arena) {
     getRandomEnemy();
     arena.innerHTML = '';
@@ -46,7 +55,10 @@ function placePokoemon(arena) {
     renderArenaMenu(arena);
 }
 
-
+/**
+ * Returns two images depicting the pokemon of the player and the enemy
+ * @returns HTML template
+ */
 function spritesHTML() {
     return `
         <div style="position:relative;top:-120px;">
@@ -56,24 +68,34 @@ function spritesHTML() {
     `;
 }
 
-
+/**
+ * 
+ * @param {*} event stopping propagation
+ */
 function closeArena(event) {
     playSound(click);
     hideOverlayDelayed(event);
     playersTurn = true;
 }
 
-
+/**
+ * 
+ */
 function setPlayerHealth() {
     currentPlayerHealth = pokemons[idPlayer].stats[0].base_stat;
 }
 
-
+/**
+ * 
+ */
 function setEnemyHealth() {
     currentEnemyHealth = pokemons[idEnemy].stats[0].base_stat;
 }
 
-
+/**
+ * 
+ * @param {*} arena 
+ */
 function renderArenaMenu(arena) {
     arena.innerHTML += `
         <button class="btn" style="position:relative;top:-100px;" onclick="closeArena(event)">close</button>
@@ -106,7 +128,11 @@ function renderArenaMenu(arena) {
     `;
 }
 
-
+/**
+ * 
+ * @param {*} index 
+ * @returns 
+ */
 function checkArenaAbility(index) {
     if (pokemons[idPlayer].moves[index]) {
         return `${pokemons[idPlayer].moves[index].move.name}`;
@@ -115,7 +141,11 @@ function checkArenaAbility(index) {
     }
 }
 
-
+/**
+ * 
+ * @param {*} index 
+ * @returns 
+ */
 function checkArenaAbilityUrl(index) {
     if (pokemons[idPlayer].moves[index]) {
         return `${pokemons[idPlayer].moves[index].move.url}`;
@@ -124,14 +154,19 @@ function checkArenaAbilityUrl(index) {
     }
 }
 
-
+/**
+ * 
+ */
 function activateAttackBtn() {
     let attackbtn = document.getElementById('attackbtn');
     attackbtn.classList.remove('attackbtn-inactive');
     attackbtn.setAttribute('onclick', 'startAttack()');
 }
 
-
+/**
+ * 
+ * @param {*} moveId 
+ */
 function hightlightMove(moveId) {
     for (let i = 1; i < 4; i++) {
         let removeHighlight = document.getElementById("move"+i);
