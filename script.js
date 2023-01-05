@@ -251,8 +251,8 @@ function rotatePokemon(id) {
 }
 
 /**
- * 
- * @param {*} event 
+ * Hiding the overlay with a delay by shrinking it.
+ * @param {*} event as propagation.
  */
 function hideOverlayDelayed(event) {
     if (event) event.stopPropagation();
@@ -269,7 +269,7 @@ function hideOverlayDelayed(event) {
 /**
  * 
  * @param {*} overlay 
- * @param {*} arena 
+ * @param {*} arena as arena object.
  */
 function overlayTimeout(overlay, arena) {
     let miniCanvas = document.getElementById('miniCanvas');
@@ -299,8 +299,8 @@ function hideOverlay(event) {
 }
 
 /**
- * 
- * @param {*} event 
+ * Implemented in index.html and called by user onclick on 1) mini-canvas and 2) arena (both within overlay)
+ * @param {*} event as propagation.
  */
 function maintainOverlay(event) {
     event.stopPropagation();
