@@ -7,22 +7,22 @@ let pokemons = [];
 // Collects ids off all pokemon that were fetched.
 let ids = [];
 
-// Initially loads the first 20 Pokemon
-loadPokemon(1, 20);
+// Initially creates 20 ids.
+createIds(1, 20);
 
 /**
- * 
+ * This function creates ids (integers) and pushes these to the ids-array.
  * @param {*} start as integer (minimum 1).
  * @param {*} end as integer (maximum is the last pokemon from pokedex API).
  */
-function loadPokemon(start, end) {
+function createIds(start, end) {
     for (i = start; i < end+2; i++) {
         ids.push(i);
     }
 }
 
 /**
- * Onclick function of loadbtn that loads the remaining pokemon if user clickes on it.
+ * Onclick function of loadbtn in index.html that loads the remaining pokemon if user clickes on it.
  */
 function loadMore() {
     if (ids.length < 22) {
@@ -31,7 +31,7 @@ function loadMore() {
         pokemons = [];
         ids = [];
         playSound(click);
-        loadPokemon(1, 150);
+        createIds(1, 150);
         getData();
     } else {
         playSound(cancel);
@@ -39,11 +39,11 @@ function loadMore() {
 }
 
 /**
- * 
+ * This function loads Pokemons from PokeAPI one after another according to the length of ids-array.
  */
 async function getData() {
     hideCanvas();
-    showLoading();
+    showLoadingScreen();
     for (let i = 0; i < ids.length; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${ids[i]}/`;
         let response = await fetch(url);
@@ -51,14 +51,14 @@ async function getData() {
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, ids[i]);
     }
-    hideLoading();
+    hideLoadingScreen();
     showCanvas();
 }
 
 /**
  * 
  */
-function showLoading() {
+function showLoadingScreen() {
     let loading = document.getElementById('loading');
     loading.classList.remove('d-none');
 }
@@ -66,7 +66,7 @@ function showLoading() {
 /**
  * 
  */
-function hideLoading() {
+function hideLoadingScreen() {
     let loading = document.getElementById('loading');
     loading.classList.add('d-none');
 }
