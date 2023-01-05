@@ -210,24 +210,39 @@ function renderSinglePokemon(id) {
  * @param {*} id as integer.
  */
 function startFight(event, id) {
+    event.stopPropagation();
+    preventUserClosingArenaDuringOpening();
+    playSound(click);
+    playSound(fight);
+    rotatePokemon(id);
+    pauseSoundAndOpenArena(id);
+}
+
+/**
+ * Auxiliary function for startFight that removes the onclick
+ * functionalities of the overlay and the close button.
+ */
+function preventUserClosingArenaDuringOpening() {
     let overlay = document.getElementById('overlay');
     overlay.setAttribute('onclick', '');
     let closebtn = document.getElementById('closebtn')
     closebtn.setAttribute('onclick', '');
-    event.stopPropagation();
-    playSound(click);
-    rotatePokemon(id);
+}
+
+/**
+ * Auxiliary function for timeout functions in startFight.
+ */
+function pauseSoundAndOpenArena(id) {
     setTimeout(function() {
         pauseSound(soundtrack);
     }, 1000);
-    playSound(fight);
     setTimeout(function() {
         openArena(id);
     }, 3000);
 }
 
 /**
- * Lets the selected Pokemon rotate as defined in style.css (.rotate)
+ * Lets the selected Pokemon rotate as defined in style.css (.rotate).
  * @param {*} id as integer.
  */
 function rotatePokemon(id) {
