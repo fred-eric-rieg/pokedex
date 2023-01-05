@@ -7,7 +7,7 @@ let pokemons = [];
 // Collects ids off all pokemon that were fetched.
 let ids = [];
 
-// Initially creates 20 ids.
+// Initially creates 20 ids equally to the first 20 pokemons from pokeAPI that will be loaded with getData().
 createIds(1, 20);
 
 /**
