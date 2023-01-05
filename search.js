@@ -2,7 +2,8 @@ let searchResults = [];
 let searchIds = [];
 
 /**
- * Overall search function that is called by typing into searchbar "onkeyup"
+ * Initial search function that is called by typing into searchbar (onkeyup)
+ * Starts by clearing the two arrays searchResults and searchIds
  */
 function search() {
     searchResults = [];

@@ -1,6 +1,3 @@
-// Hier kann auf jeden Fall mit Klassen gearbeitet werden
-// Sowohl Spielerpokemon als auch Gegnerpokemon sind Objekte der gleichen Klasse
-
 // Current Pokemon that is fetched from server is stored here (one after another).
 let currentPokemon;
 
@@ -10,13 +7,13 @@ let pokemons = [];
 // Collects ids off all pokemon that were fetched.
 let ids = [];
 
-
+// Initially loads the first 20 Pokemon
 loadPokemon(1, 20);
 
 /**
  * 
- * @param {*} start 
- * @param {*} end 
+ * @param {*} start as integer (minimum 1).
+ * @param {*} end as integer (maximum is the last pokemon from pokedex API).
  */
 function loadPokemon(start, end) {
     for (i = start; i < end+2; i++) {
@@ -106,7 +103,7 @@ function renderPokemon(currentPokemon, id) {
  * 
  * @param {*} currentPokemon 
  * @param {*} id 
- * @returns 
+ * @returns html template that creates one pokemon card.
  */
 function templateHTML(currentPokemon, id) {
     return `
@@ -123,8 +120,8 @@ function templateHTML(currentPokemon, id) {
 /**
  * 
  * @param {*} currentPokemon 
- * @param {*} index 
- * @returns 
+ * @param {*} index of the moves array from Pokedex API.
+ * @returns either the name of the current Pokemon's move at a given index or nothing.
  */
 function checkAbility(currentPokemon, index) {
     if (currentPokemon.moves[index]) {
@@ -135,7 +132,7 @@ function checkAbility(currentPokemon, index) {
 }
 
 /**
- * 
+ * Changes the color of a Pokemon's type on the card depending on the typeName
  * @param {*} currentPokemon 
  * @param {*} id 
  */
@@ -151,7 +148,9 @@ function changeTypeColor(currentPokemon, id) {
 }
 
 /**
- * 
+ * Mousehover color effect of cards:
+ * Changes the classList of a card depending on the Pokemon's type.
+ * These classes create a colored background on mousehovering over the cards.
  * @param {*} type 
  * @param {*} id 
  */
@@ -166,8 +165,8 @@ function changeColor(type, id) {
 }
 
 /**
- * 
- * @param {*} id 
+ * Rendering process of a single large pokemon card when user clicks on a corresponding small pokemon card.
+ * @param {*} id as integer.
  */
 function showPokemon(id) {
     playSound(click);
@@ -180,9 +179,9 @@ function showPokemon(id) {
 }
 
 /**
- * 
- * @param {*} id 
- * @returns 
+ * This is a html template auxiliary function called by the showPokemon(id) function.
+ * @param {*} id as integer.
+ * @returns html template of a single large pokemon card.
  */
 function renderSinglePokemon(id) {
     return `
@@ -204,9 +203,11 @@ function renderSinglePokemon(id) {
 }
 
 /**
- * 
- * @param {*} event 
- * @param {*} id 
+ * This function is called when unser clicks on "select Champion" on the large pokemon card.
+ * The fight sequence starts here -> playing sounds, starting effects, opening the arena and
+ * preventing user to close the arena during this several second long process.
+ * @param {*} event as propagation.
+ * @param {*} id as integer.
  */
 function startFight(event, id) {
     let overlay = document.getElementById('overlay');
@@ -215,7 +216,7 @@ function startFight(event, id) {
     closebtn.setAttribute('onclick', '');
     event.stopPropagation();
     playSound(click);
-    startEffects(id);
+    rotatePokemon(id);
     setTimeout(function() {
         pauseSound(soundtrack);
     }, 1000);
@@ -226,44 +227,12 @@ function startFight(event, id) {
 }
 
 /**
- * 
- * @param {*} id 
+ * Lets the selected Pokemon rotate as defined in style.css (.rotate)
+ * @param {*} id as integer.
  */
-function startEffects(id) {
-    let card = document.getElementById(`card${id}`);
-    sequenceOfCardEffects(card);
+function rotatePokemon(id) {
     let image = document.getElementById(`img${id}`);
     image.classList.add('rotate');
-}
-
-/**
- * 
- * @param {*} card 
- */
-function sequenceOfCardEffects(card) {
-    setTimeout(function() {
-        card.classList.add('green');
-    }, 500);
-    setTimeout(function() {
-        card.classList.remove('green');
-        card.classList.add('lightgreen');
-    }, 1000);
-    setTimeout(function() {
-        card.classList.remove('lightgreen');
-        card.classList.add('green');
-    }, 1500);
-    setTimeout(function() {
-        card.classList.remove('green');
-        card.classList.add('lightgreen');
-    }, 2000);
-    setTimeout(function() {
-        card.classList.remove('lightgreen');
-        card.classList.add('green');
-    }, 2500);
-    setTimeout(function() {
-        card.classList.remove('green');
-    }, 3000);
-    card.classList.add('border-green');
 }
 
 /**

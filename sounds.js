@@ -1,6 +1,3 @@
-// Hier kann mit einer Class gearbeitet werden
-// Soweit ich das sehen kann, wird mit new Audio bereits eine Klasse aufgerufen, die in vanilla JS vorhanden ist.
-
 // All sounds
 let soundtrack = new Audio("sound/background.mp3");
 soundtrack.volume = 0.05;
@@ -23,7 +20,7 @@ let mute = false;
 
 /**
  * 
- * @param {*} name as Audio object from variable declarations on top
+ * @param {*} name as Audio object from list of variable declarations at the top
  */
 function playSound(name) {
     if (name == soundtrack) {
@@ -35,7 +32,7 @@ function playSound(name) {
 }
 
 /**
- * 
+ * Simply pauses the currently running soundtrack (given as parameter)
  * @param {*} name 
  */
 function pauseSound(name) {
@@ -44,7 +41,9 @@ function pauseSound(name) {
 }
 
 /**
- * 
+ * Controls volume with two options: 0 or 0.05.
+ * Activated by the one and only mute button.
+ * Uses the mute boolean declared on top.
  */
 function muteSoundtrack() {
     let mutebtn = document.getElementById('mutebtn');
