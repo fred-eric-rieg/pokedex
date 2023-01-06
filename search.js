@@ -20,7 +20,7 @@ function search() {
 function compareUserInput(userInput) {
     for (let i = 0; i < pokemons.length; i++) comparePokemons(userInput, i);
     if (searchResults.length == 0) resetSearchbar();
-    else renderFoundPokemons(canvas);
+    else renderFoundPokemons();
 }
 
 /**
@@ -44,12 +44,10 @@ function resetSearchbar() {
     canvas.innerHTML = '';
     canvas.innerHTML = `<span style='color:white';>No Pokemon found for '${searchbar.value}'!</span>`;
     searchbar.value = '';
-    renderAllTimeout();
+    renderWithTimeout();
 }
 
-/**
- * Immedeately renders all found pokemons from searchResults
- */
+
 function renderFoundPokemons() {
     canvas.innerHTML = '';
     for (let i = 0; i < searchResults.length; i++) {
@@ -57,10 +55,8 @@ function renderFoundPokemons() {
     }
 }
 
-/**
- * A special render function with a timeout that is called by resetSearchbar()
- */
-function renderAllTimeout() {
+
+function renderWithTimeout() {
     let canvas = document.getElementById('canvas');
     setTimeout(function () {
         canvas.innerHTML = '';
@@ -70,19 +66,15 @@ function renderAllTimeout() {
     }, 2000);
 }
 
-/**
- * Renders without a timeout that is only called by clearSearch()
- */
-function renderAllNoTimeout() {
+
+function renderWithoutTimeout() {
     canvas.innerHTML = '';
     for (let i = 0; i < pokemons.length; i++) renderPokemon(pokemons[i], ids[i]);
 }
 
-/**
- * Clears the searchbar and immediately renders (without timeout)
- */
+
 function clearSearch() {
     let searchbar = document.getElementById('searchbar');
     searchbar.value = '';
-    renderAllNoTimeout();
+    renderWithoutTimeout();
 }

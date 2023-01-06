@@ -55,56 +55,39 @@ async function getData() {
     showCanvas();
 }
 
-/**
- * 
- */
+
 function showLoadingScreen() {
     let loading = document.getElementById('loading');
     loading.classList.remove('d-none');
 }
 
-/**
- * 
- */
+
 function hideLoadingScreen() {
     let loading = document.getElementById('loading');
     loading.classList.add('d-none');
 }
 
-/**
- * 
- */
+
 function hideCanvas() {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML = '';
     canvas.classList.add('d-none');
 }
 
-/**
- * 
- */
+
 function showCanvas() {
     let canvas = document.getElementById('canvas');
     canvas.classList.remove('d-none');
 }
 
-/**
- * 
- * @param {*} currentPokemon 
- * @param {*} id 
- */
+
 function renderPokemon(currentPokemon, id) {
     let canvas = document.getElementById('canvas');
     canvas.innerHTML += templateHTML(currentPokemon, id);
     changeTypeColor(currentPokemon, id);
 }
 
-/**
- * 
- * @param {*} currentPokemon 
- * @param {*} id 
- * @returns html template that creates one pokemon card.
- */
+
 function templateHTML(currentPokemon, id) {
     return `
         <div class="wrap">

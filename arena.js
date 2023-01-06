@@ -1,6 +1,3 @@
-// Selbst die Arena ist eine Klasse mit festen Werten, die immer wieder als Instanz aufgerufen werden könnte
-// TODO: Dokumentation
-
 let idEnemy;
 let idPlayer;
 
@@ -57,7 +54,7 @@ function placePokoemon(arena) {
 
 /**
  * Returns two images depicting the pokemon of the player and the enemy
- * @returns HTML template
+ * @returns
  */
 function spritesHTML() {
     return `
@@ -70,7 +67,7 @@ function spritesHTML() {
 
 /**
  * 
- * @param {*} event stopping propagation
+ * @param {*} event stopping propagation.
  */
 function closeArena(event) {
     playSound(click);
@@ -78,16 +75,12 @@ function closeArena(event) {
     playersTurn = true;
 }
 
-/**
- * 
- */
+
 function setPlayerHealth() {
     currentPlayerHealth = pokemons[idPlayer].stats[0].base_stat;
 }
 
-/**
- * 
- */
+
 function setEnemyHealth() {
     currentEnemyHealth = pokemons[idEnemy].stats[0].base_stat;
 }
@@ -154,9 +147,7 @@ function checkArenaAbilityUrl(index) {
     }
 }
 
-/**
- * 
- */
+
 function activateAttackBtn() {
     let attackbtn = document.getElementById('attackbtn');
     attackbtn.classList.remove('attackbtn-inactive');

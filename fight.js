@@ -10,7 +10,7 @@ let chosenEnemyAttackDmg = 0;
 let playersTurn = true;
 
 /**
- * Triggered when player clicks the attach-btn
+ * Called when player clicks the attack button
  */
 function startAttack() {
     if (playersTurn) {
@@ -56,9 +56,7 @@ function lockMove(moveId) {
     }
 }
 
-/**
- * 
- */
+
 function deactivateAttackBtn() {
     let attackbtn = document.getElementById('attackbtn');
     attackbtn.classList.add('attackbtn-inactive');
@@ -185,10 +183,7 @@ function visualiseAttackEffect(id) {
     }
 }
 
-/**
- * 
- * @param {*} pokemon 
- */
+
 function visualiseHitEffect(pokemon) {
     pokemon.classList.add('hit');
     for (let i = 1; i < 6; i++) {
@@ -225,9 +220,7 @@ function startEnemyAttack() {
     }, 1000);
 }
 
-/**
- * 
- */
+
 function chooseEnemyAttack() {
     randomIndex = Math.floor(Math.random() * 3);
     chosenEnemyAttackName = pokemons[idEnemy].moves[randomIndex].move.name;
@@ -279,11 +272,7 @@ function writeAttackDescription(type, id) {
     }
 }
 
-/**
- * 
- * @param {*} url 
- * @param {*} who 
- */
+
 async function loadMove(url, who) {
     let newUrl = url;
     let response = await fetch(newUrl);
@@ -292,17 +281,13 @@ async function loadMove(url, who) {
     if (who == "player") activateAttackBtn();
 }
 
-/**
- * 
- */
+
 function displayWinner() {
     let arena = document.getElementById('arena');
     arena.classList.add('winner');
 }
 
-/**
- * 
- */
+
 function hideWinner() {
     let arena = document.getElementById('arena');
     arena.classList.remove('winner');

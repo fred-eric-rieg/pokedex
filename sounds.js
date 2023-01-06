@@ -15,13 +15,10 @@ attack.volume = 0.1;
 let dead = new Audio('sound/dead.mp3');
 dead.volume = 0.1;
 
-// on/off for sound muting
+
 let mute = false;
 
-/**
- * 
- * @param {*} name as Audio object from list of variable declarations at the top
- */
+
 function playSound(name) {
     if (name == soundtrack) {
         name.play();
@@ -31,20 +28,13 @@ function playSound(name) {
     }
 }
 
-/**
- * Simply pauses the currently running soundtrack (given as parameter)
- * @param {*} name 
- */
+
 function pauseSound(name) {
     name.currentTime = 0;
     name.pause();
 }
 
-/**
- * Controls volume with two options: 0 or 0.05.
- * Activated by the one and only mute button.
- * Uses the mute boolean declared on top.
- */
+
 function muteSoundtrack() {
     let mutebtn = document.getElementById('mutebtn');
     if (!mute) {
