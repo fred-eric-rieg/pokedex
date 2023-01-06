@@ -27,7 +27,7 @@ function loadMore() {
 async function getPokemons(amountOfPokemons) {
     hideCanvas();
     showLoadingScreen();
-    for (let i = 1; i < amountOfPokemons+1; i++) {
+    for (let i = 1; i < amountOfPokemons + 1; i++) {
         let url = `https://pokeapi.co/api/v2/pokemon/${i}/`;
         let response = await fetch(url);
         currentPokemon = await response.json();
@@ -103,31 +103,33 @@ function checkAbility(currentPokemon, index) {
  * @param {*} id 
  */
 function changeTypeColor(currentPokemon, id) {
-        let typeName = currentPokemon.types[0].type.name;
-        let type = document.getElementById(`types${id}`);
-        if      (typeName == "grass")   type.style.background = 'lightgreen';
-        else if (typeName == "fire")    type.style.background = 'lightcoral';
-        else if (typeName == "water")   type.style.background = 'lightskyblue';
-        else if (typeName == "wind")    type.style.background = 'lightskyblue';
-        else if (typeName == "normal")  type.style.background = '#ccc';
-        else if (typeName == "bug")     type.style.background = 'burlywood';
+    let type = currentPokemon.types[0].type.name;
+    let typeId = document.getElementById(`types${id}`);
+    if (type == "grass" | type == "poison") typeId.style.background = 'lightgreen';
+    else if (type == "fire" | type == "dragon") typeId.style.background = 'lightcoral';
+    else if (type == "water" | type == "ice") typeId.style.background = 'lightskyblue';
+    else if (type == "normal" | type == "rock") typeId.style.background = '#ccc';
+    else if (type == "bug" | type == "ground") typeId.style.background = 'burlywood';
+    else if (type == "electric") typeId.style.background = 'yellow';
+    else if (type == "fairy") typeId.style.background = 'pink';
+    else if (type == "psychic" | type == "ghost" | type == "fighting") typeId.style.background = 'violet';
 }
 
 /**
- * Mousehover color effect of cards:
- * Changes the classList of a card depending on the Pokemon's type.
- * These classes create a colored background on mousehovering over the cards.
+ * User hovers over a card, then card changes color to corresponding pokemon-type.
  * @param {*} type 
  * @param {*} id 
  */
 function changeColor(type, id) {
     let card = document.getElementById(`card${id}`);
-    if      (type == "grass")   card.classList.add('green-card');
-    else if (type == "fire")    card.classList.add('red-card');
-    else if (type == "water")   card.classList.add('blue-card');
-    else if (type == "wind")    card.classList.add('blue-card');
-    else if (type == "normal")  card.classList.add('grey-card');
-    else if (type == "bug")     card.classList.add('brown-card');
+    if (type == "grass" | type == "poison") card.classList.add('green-card');
+    else if (type == "fire" | type == "dragon") card.classList.add('red-card');
+    else if (type == "water" | type == "ice") card.classList.add('blue-card');
+    else if (type == "normal" | type == "rock") card.classList.add('grey-card');
+    else if (type == "bug" | type == "ground") card.classList.add('brown-card');
+    else if (type == "electric") card.classList.add('yellow-card');
+    else if (type == "fairy") card.classList.add('pink-card');
+    else if (type == "psychic" | type == "ghost" | type == "fighting") card.classList.add('violet-card');
 }
 
 /**
@@ -154,14 +156,14 @@ function renderSinglePokemon(id) {
         <div class="wrap-nohover">
             <div class="card-nohover" id="card${id}">
                 <div style="display:flex;justify-content:space-between;">
-                    <span>#${id}<br><b>${pokemons[id-1].name.toUpperCase()}</b></span>
+                    <span>#${id}<br><b>${pokemons[id - 1].name.toUpperCase()}</b></span>
                     <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
-                <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id-1].sprites.front_default}">
-                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[0].base_stat}px;">${pokemons[id-1].stats[0].base_stat}/100</div></div></div>
-                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[1].base_stat}px;">${pokemons[id-1].stats[1].base_stat}/100</div></div></div>
-                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[2].base_stat}px;">${pokemons[id-1].stats[2].base_stat}/100</div></div></div>
-                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id-1].stats[5].base_stat}px;">${pokemons[id-1].stats[5].base_stat}/100</div></div></div>
+                <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.front_default}">
+                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[0].base_stat}px;">${pokemons[id - 1].stats[0].base_stat}/100</div></div></div>
+                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[1].base_stat}px;">${pokemons[id - 1].stats[1].base_stat}/100</div></div></div>
+                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[2].base_stat}px;">${pokemons[id - 1].stats[2].base_stat}/100</div></div></div>
+                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[5].base_stat}px;">${pokemons[id - 1].stats[5].base_stat}/100</div></div></div>
                 <button class="btn" onclick="startFight(event, ${id})">select Champion</button>
             </div>
         </div>
@@ -196,13 +198,13 @@ function preventUserClosingArenaDuringOpening() {
 }
 
 /**
- * Auxiliary function for timeout functions in startFight.
+ * Auxiliary function for timeout-functions in startFight.
  */
 function pauseSoundAndOpenArena(id) {
-    setTimeout(function() {
+    setTimeout(function () {
         pauseSound(soundtrack);
     }, 1000);
-    setTimeout(function() {
+    setTimeout(function () {
         openArena(id);
     }, 3000);
 }
@@ -239,7 +241,7 @@ function hideOverlayDelayed(event) {
  */
 function overlayTimeout(overlay, arena) {
     let miniCanvas = document.getElementById('miniCanvas');
-    setTimeout(function() {
+    setTimeout(function () {
         overlay.classList.add('d-none');
         arena.classList.remove('d-flex');
         arena.classList.add('d-none');

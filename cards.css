@@ -78,3 +78,15 @@
 .grey-card:hover {
     background: #ccc;
 }
+
+.violet-card:hover {
+    background: violet;
+}
+
+.yellow-card:hover {
+    background: yellow;
+}
+
+.pink-card:hover {
+    background: pink;
+}

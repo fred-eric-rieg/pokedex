@@ -17,8 +17,7 @@ function startAttack() {
         deactivateAttackBtn();
         playSound(attack);
         playSound(click);
-        // DMG by player is applied here:
-        currentEnemyHealth -= Math.floor(chosenAttackDmg * pokemons[idEnemy].stats[2].base_stat / 100 * pokemons[idPlayer].stats[1].base_stat / 100);
+        calculatePlayersDamage();
         writeAttackDescription('', idPlayer);
         visualiseAttackEffect(idPlayer);
         setTimeout(function () {
@@ -27,6 +26,13 @@ function startAttack() {
     } else {
         playSound(cancel);
     }
+}
+
+
+function calculatePlayersDamage() {
+    currentEnemyHealth -= Math.floor(chosenAttackDmg
+        * pokemons[idEnemy].stats[2].base_stat / 100
+        * pokemons[idPlayer].stats[1].base_stat / 100);
 }
 
 /**
@@ -65,7 +71,7 @@ function deactivateAttackBtn() {
 
 /**
  * 
- * @param {*} id 
+ * @param {*} id
  */
 function checkIfDead(id) {
     if (id == idEnemy) {
@@ -209,10 +215,7 @@ function startEnemyAttack() {
     setTimeout(function () {
         visualiseHitEffect(champion);
         writeAttackDescription("move", idEnemy);
-        // DMG by enemy is applied here
-        currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg
-            * pokemons[idPlayer].stats[2].base_stat / 100
-            * pokemons[idEnemy].stats[1].base_stat / 100);
+        claculateEnemyDamage();
         setTimeout(function () {
             writeAttackDescription("", idEnemy);
         }, 1000);
@@ -225,6 +228,13 @@ function chooseEnemyAttack() {
     randomIndex = Math.floor(Math.random() * 3);
     chosenEnemyAttackName = pokemons[idEnemy].moves[randomIndex].move.name;
     loadMoveEnemy(pokemons[idEnemy].moves[randomIndex].move.url);
+}
+
+
+function claculateEnemyDamage() {
+    currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg
+        * pokemons[idPlayer].stats[2].base_stat / 100
+        * pokemons[idEnemy].stats[1].base_stat / 100);
 }
 
 /**
