@@ -4,52 +4,35 @@ let currentPokemon;
 // Collects all pokemon that were fetched.
 let pokemons = [];
 
-// Collects ids off all pokemon that were fetched.
-let ids = [];
-
-// Initially creates 20 ids equally to the first 20 pokemons from pokeAPI that will be loaded with getData().
-createIds(1, 20);
-
-/**
- * This function creates ids (integers) and pushes these to the ids-array.
- * @param {*} start as integer (minimum 1).
- * @param {*} end as integer (maximum is the last pokemon from pokedex API).
- */
-function createIds(start, end) {
-    for (i = start; i < end+2; i++) {
-        ids.push(i);
-    }
-}
 
 /**
  * Onclick function of loadbtn in index.html that loads the remaining pokemon if user clickes on it.
  */
 function loadMore() {
-    if (ids.length < 22) {
+    if (pokemons.length < 22) {
         let loadbtn = document.getElementById('loadbtn');
         loadbtn.innerHTML = "loading completed";
         pokemons = [];
-        ids = [];
         playSound(click);
-        createIds(1, 150);
-        getData();
+        getPokemons(151);
     } else {
         playSound(cancel);
     }
 }
 
 /**
- * This function loads Pokemons from PokeAPI one after another according to the length of ids-array.
+ * 
+ * @param {*} amountOfPokemons as integer.
  */
-async function getData() {
+async function getPokemons(amountOfPokemons) {
     hideCanvas();
     showLoadingScreen();
-    for (let i = 0; i < ids.length; i++) {
-        let url = `https://pokeapi.co/api/v2/pokemon/${ids[i]}/`;
+    for (let i = 1; i < amountOfPokemons+1; i++) {
+        let url = `https://pokeapi.co/api/v2/pokemon/${i}/`;
         let response = await fetch(url);
         currentPokemon = await response.json();
         pokemons.push(currentPokemon);
-        renderPokemon(currentPokemon, ids[i]);
+        renderPokemon(currentPokemon, i);
     }
     hideLoadingScreen();
     showCanvas();
