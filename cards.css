@@ -1,4 +1,5 @@
 .card {
+    transition: all 225ms ease-in-out;
     display: flex;
     flex-direction: column;
     background: white;
@@ -60,33 +61,41 @@
 }
 
 .green-card:hover {
-    background: lightgreen;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightgreen, green);
 }
 
 .red-card:hover {
-    background: lightcoral;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightcoral, crimson);
 }
 
 .blue-card:hover {
-    background: lightskyblue;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightblue, navy);
 }
 
 .brown-card:hover {
-    background: burlywood;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(sandybrown, brown);
 }
 
 .grey-card:hover {
-    background: #ccc;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightgrey, grey);
 }
 
 .violet-card:hover {
-    background: violet;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(violet, indigo);
 }
 
 .yellow-card:hover {
-    background: yellow;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightyellow, gold);
 }
 
 .pink-card:hover {
-    background: pink;
+    transition: all 225ms ease-in-out;
+    background: radial-gradient(lightpink, deeppink);
 }

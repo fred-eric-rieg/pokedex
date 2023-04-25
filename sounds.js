@@ -1,4 +1,4 @@
-// All sounds
+// All sounds loaded here
 let soundtrack = new Audio("sound/background.mp3");
 soundtrack.volume = 0.05;
 let fight = new Audio("sound/fight.mp3");

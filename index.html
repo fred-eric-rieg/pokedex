@@ -17,7 +17,7 @@
 
 <body onload="getPokemons(20)">
 
-
+    <!-- Header with searchbar -->
     <div class="searchbar-wrap">
         <h1>Pokédex</h1>
         <div class="searchbar"><input id="searchbar" type="text" placeholder="Search a Pokemon..."
@@ -25,11 +25,13 @@
         <div class="mute"><button class="mutebtn" id="mutebtn" onclick="muteSoundtrack()">no music</button></div>
     </div>
 
+    <!-- Loading screen -->
     <div class="loading d-none" id="loading">
         <div class="ring"></div>
         <span id="loadtext">loading...</span>
     </div>
 
+    <!-- Overlay -->
     <div class="overlay d-none" id="overlay" onclick="hideOverlay(event)">
         <div class="mini-canvas" id="miniCanvas" onclick="maintainOverlay(event)">
 
@@ -43,13 +45,14 @@
 
     </div>
 
+    <!-- Load more button -->
     <div style="display:flex;align-items:center;justify-content:center;background:inherit;padding:16px;">
-        <button class="btn" id="loadbtn" onclick="loadMore()">load all 151</button>
+        <button class="btn" id="loadbtn" onclick="loadMore()">load all 151 oldscool pokemon</button>
     </div>
 
 
     <footer>
-        <span style="padding-left:50px;margin-bottom:16px;">Copyright 2022 Frederic Rieg</span>
+        <span style="padding-left:50px;margin-bottom:16px;">Copyright 2023 Frederic Rieg</span>
         <a href="https://www.fesliyanstudios.com/royalty-free-music/download/8-bit-adventure/2282">Background
             soundtrack</a>
         <a href="https://www.fesliyanstudios.com/royalty-free-music/download/boss-time/2340">Arena fight</a>

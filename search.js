@@ -2,8 +2,8 @@ let searchResults = [];
 let searchIds = [];
 
 /**
- * Initial search function that is called by typing into searchbar (onkeyup)
- * Starts by clearing the two arrays searchResults and searchIds
+ * Initial search function that is called by typing into searchbar (onkeyup).
+ * Starts by clearing the two arrays searchResults and searchIds.
  */
 function search() {
     searchResults = [];
@@ -14,7 +14,7 @@ function search() {
 }
 
 /**
- * Compares user-input to pokemons array. resets searchbar if no match, else calls render function
+ * Compares user-input with the pokemon-array. resets searchbar if no match, else calls render function.
  * @param {*} userInput as string
  */
 function compareUserInput(userInput) {
@@ -37,13 +37,13 @@ function comparePokemons(userInput, i) {
 
 /**
  * Resets searchbar and gives user feedback on his search. Calls a timeout render function.
+ * So that the user can see the feedback before the canvas is cleared and rendered again.
  */
 function resetSearchbar() {
     let canvas = document.getElementById('canvas');
     let searchbar = document.getElementById('searchbar');
     canvas.innerHTML = '';
     canvas.innerHTML = `<span style='color:white';>No Pokemon found for '${searchbar.value}'!</span>`;
-    searchbar.value = '';
     renderWithTimeout();
 }
 
@@ -52,6 +52,7 @@ function renderFoundPokemons() {
     canvas.innerHTML = '';
     for (let i = 0; i < searchResults.length; i++) {
         canvas.innerHTML += templateHTML(searchResults[i], searchIds[i]);
+        changeTypeColor(searchResults[i], searchIds[i]);
     }
 }
 
@@ -72,7 +73,9 @@ function renderWithoutTimeout() {
     for (let i = 0; i < pokemons.length; i++) renderPokemon(pokemons[i], i);
 }
 
-
+/**
+ * This function is called by the X-button in the searchbar.
+ */
 function clearSearch() {
     let searchbar = document.getElementById('searchbar');
     searchbar.value = '';
