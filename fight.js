@@ -10,6 +10,32 @@ let chosenEnemyAttackDmg = 0;
 let playersTurn = true;
 
 /**
+ * Called when player selects a move.
+ */
+function lockMove(moveId) {
+    playSound(click);
+    if (moveId == 'move1') {
+        chosenAttackName = returnValidMoveName(0);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(pokemons[idPlayer].moves[0].move.url, "player");
+    } else if (moveId == 'move2') {
+        chosenAttackName = returnValidMoveName(1);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(1), "player");
+    } else if (moveId == 'move3') {
+        chosenAttackName = returnValidMoveName(2);
+        hightlightMove(moveId);
+        writeAttackDescription('move', idPlayer);
+        activateAttackBtn();
+        loadMove(checkArenaAbilityUrl(2), "player");
+    }
+}
+
+/**
  * Called when player clicks the attack button
  */
 function startAttack() {
@@ -17,7 +43,7 @@ function startAttack() {
         deactivateAttackBtn();
         playSound(attack);
         playSound(click);
-        calculatePlayersDamage();
+        calculateDamageToEnemy();
         writeAttackDescription('', idPlayer);
         visualiseAttackEffect(idPlayer);
         setTimeout(function () {
@@ -29,37 +55,21 @@ function startAttack() {
 }
 
 
-function calculatePlayersDamage() {
+function calculateDamageToEnemy() {
     currentEnemyHealth -= Math.floor(chosenAttackDmg
         * pokemons[idEnemy].stats[2].base_stat / 100
         * pokemons[idPlayer].stats[1].base_stat / 100);
 }
 
+
 /**
- * Players attacks handled here (red little menu where player has to first choose one of three attacks,
- * then the attack-btn is activated.
+ * Activates the attack button and sets the onclick attribute to startAttack().
+ * Is called when a move is selected.
  */
-function lockMove(moveId) {
-    playSound(click);
-    if (moveId == 'move1') {
-        chosenAttackName = pokemons[idPlayer].moves[0].move.name;
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(pokemons[idPlayer].moves[0].move.url, "player");
-    } else if (moveId == 'move2') {
-        chosenAttackName = checkArenaAbility(1);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(1), "player");
-    } else if (moveId == 'move3') {
-        chosenAttackName = checkArenaAbility(2);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(2), "player");
-    }
+function activateAttackBtn() {
+    let attackbtn = document.getElementById('attackbtn');
+    attackbtn.classList.remove('attackbtn-inactive');
+    attackbtn.setAttribute('onclick', 'startAttack()');
 }
 
 

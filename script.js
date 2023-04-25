@@ -21,15 +21,16 @@ function loadMore() {
 }
 
 /**
- * 
+ * Estabilishes connection to pokeapi.co and fetches as many pokemon as stated in the parameters.
+ * (On initial load 20 pokemon).
  * @param {*} amountOfPokemons as integer.
  */
 async function getPokemons(amountOfPokemons) {
     hideCanvas();
     showLoadingScreen();
     for (let i = 1; i < amountOfPokemons + 1; i++) {
-        let url = `https://pokeapi.co/api/v2/pokemon/${i}/`;
-        let response = await fetch(url);
+        let urlPokemon = `https://pokeapi.co/api/v2/pokemon/${i}/`;
+        let response = await fetch(urlPokemon);
         currentPokemon = await response.json();
         pokemons.push(currentPokemon);
         renderPokemon(currentPokemon, i);
@@ -84,21 +85,7 @@ function templateHTML(currentPokemon, id) {
 }
 
 /**
- * 
- * @param {*} currentPokemon 
- * @param {*} index of the moves array from Pokedex API.
- * @returns either the name of the current Pokemon's move at a given index or nothing.
- */
-function checkAbility(currentPokemon, index) {
-    if (currentPokemon.moves[index]) {
-        return `${currentPokemon.moves[index].move.name}`;
-    } else {
-        return '';
-    }
-}
-
-/**
- * Changes the color of a Pokemon's type on the card depending on the typeName
+ * Changes the color of a Pokemon's type on the small card depending on the typeName
  * @param {*} currentPokemon 
  * @param {*} id 
  */
@@ -160,11 +147,11 @@ function renderSinglePokemon(id) {
                     <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
                 <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.front_default}">
-                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[0].base_stat}px;">${pokemons[id - 1].stats[0].base_stat}/100</div></div></div>
-                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[1].base_stat}px;">${pokemons[id - 1].stats[1].base_stat}/100</div></div></div>
-                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[2].base_stat}px;">${pokemons[id - 1].stats[2].base_stat}/100</div></div></div>
-                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[5].base_stat}px;">${pokemons[id - 1].stats[5].base_stat}/100</div></div></div>
-                <button class="btn" onclick="startFight(event, ${id})">select Champion</button>
+                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[0].base_stat}px;">${pokemons[id - 1].stats[0].base_stat}</div></div></div>
+                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[1].base_stat}px;">${pokemons[id - 1].stats[1].base_stat}</div></div></div>
+                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[2].base_stat}px;">${pokemons[id - 1].stats[2].base_stat}</div></div></div>
+                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[5].base_stat}px;">${pokemons[id - 1].stats[5].base_stat}</div></div></div>
+                <button id="startFight" class="btn" onclick="startFight(event, ${id})">select Champion</button>
             </div>
         </div>
     `;
@@ -195,17 +182,21 @@ function preventUserClosingArenaDuringOpening() {
     overlay.setAttribute('onclick', '');
     let closebtn = document.getElementById('closebtn')
     closebtn.setAttribute('onclick', '');
+    closebtn.style.cursor = 'default';
+    let startFight = document.getElementById('startFight');
+    startFight.setAttribute('onclick', '');
+    startFight.style.cursor = 'default';
 }
 
 /**
- * Auxiliary function for timeout-functions in startFight.
+ * Auxiliary function for startFight that pauses the soundtrack and opens the arena overlay.
  */
 function pauseSoundAndOpenArena(id) {
     setTimeout(function () {
         pauseSound(soundtrack);
     }, 1000);
     setTimeout(function () {
-        openArena(id);
+        openArena(id); // Moving to arena.js
     }, 3000);
 }
 
@@ -262,6 +253,7 @@ function hideOverlay(event) {
     miniCanvas.classList.remove('d-none');
     let closebtn = document.getElementById('closebtn');
     closebtn.setAttribute('onclick', 'closeArena(event)');
+    closebtn.style.cursor = 'pointer';
     cancel.currentTime = 0;
     cancel.play();
 }

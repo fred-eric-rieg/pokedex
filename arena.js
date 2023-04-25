@@ -1,5 +1,19 @@
 let idEnemy;
 let idPlayer;
+let playerMoves = [];
+let enemyMoves = [];
+
+/**
+ * Called in script.js after choosing a Pokemon to fight with.
+ * @param {*} id 
+ */
+function openArena(id) {
+    idPlayer = id - 1;
+    getRandomEnemy();
+    hideMinicanvasAndShowArena();
+    loadMovesFromAPI();
+    loadArenaContentsWithDelay();
+}
 
 /**
  * Generates a random id and sets idEnemy to this id => random enemy to fight player in arena
@@ -7,53 +21,134 @@ let idPlayer;
 function getRandomEnemy() {
     if (pokemons.length < 22) {
         let randomId = Math.floor(Math.random() * 21);
+        randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
         idEnemy = randomId;
     } else if (pokemons.length > 21) {
         let randomId = Math.floor(Math.random() * 152);
+        randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
         idEnemy = randomId;
+        console.log(randomId);
     }
 }
 
-/**
- * 
- * @param {*} id 
- */
-function openArena(id) {
-    idPlayer = id - 1;
+
+function hideMinicanvasAndShowArena() {
     let miniCanvas = document.getElementById('miniCanvas');
     miniCanvas.classList.add('d-none');
     let arena = document.getElementById('arena');
     arena.classList.add('d-flex');
     arena.classList.remove('d-none');
-    setTimeout(function () {
-        arena.classList.add('big');
-        setTimeout(function () {
-            playSound(spawn);
-            placePokoemon(arena);
-            let overlay = document.getElementById('overlay');
-            overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
-        }, 2000);
-    }, 1000);
 }
 
 /**
- * 
+ * Loads all moves of the player and the enemy from the API.
+ */
+async function loadMovesFromAPI() {
+    playerMoves = []; // Clear old moves.
+    enemyMoves = []; // Clear old moves.
+    let counterPlayer = countPlayerMoves();
+    let counterEnemy = countEnemyMoves();
+    for (let index = 0; index < counterPlayer; index++) {
+        collectPlayerMoves(index);
+    }
+    for (let index = 0; index < counterEnemy; index++) {
+        collectEnemyMoves(index);
+    }
+}
+
+/**
+ * @returns number of moves the player has.
+ */
+function countPlayerMoves() {
+    let moves = pokemons[idPlayer].moves;
+    let counter = 0;
+    for (let index = 0; index < moves.length; index++) {
+        if (moves[index].move.url != null) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+/**
+ * @returns number of moves the enemy has.
+ */
+function countEnemyMoves() {
+    let moves = pokemons[idEnemy].moves;
+    let counter = 0;
+    for (let index = 0; index < moves.length; index++) {
+        if (moves[index].move.url != null) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+/**
+ * Collects only moves that have a power value.
+ * @param {*} index as number.
+ */
+async function collectPlayerMoves(index) {
+    let urlPlayer = pokemons[idPlayer].moves[index].move.url;
+    let responsePlayer = await fetch(urlPlayer);
+    let movePlayer = await responsePlayer.json();
+    if (movePlayer.power != null) {
+        playerMoves.push(movePlayer);
+    }
+}
+
+/**
+ * Collects only moves that have a power value.
+ * @param {*} index as number.
+ */
+async function collectEnemyMoves(index) {
+    let urlEnemy = pokemons[idEnemy].moves[index].move.url;
+    let responseEnemy = await fetch(urlEnemy);
+    let moveEnemy = await responseEnemy.json();
+    enemyMoves.push(moveEnemy);
+}
+
+/**
+ * Widens the arena after 1 second.
+ * After 3 seconds: allows player to use the close arena button and places the Pokemon into arena.
+ */
+function loadArenaContentsWithDelay() {
+    setTimeout(function () {
+        arena.classList.add('big');
+    }, 1000);
+    setTimeout(function () {
+        playSound(spawn);
+        placePokemon(arena);
+        setPrefightValues();
+        let overlay = document.getElementById('overlay');
+        overlay.setAttribute('onclick', 'hideOverlayDelayed(event);');
+    }, 3000);
+}
+
+/**
+ * Place pokemon with delay to create a spawning effect.
  * @param {*} arena 
  */
-function placePokoemon(arena) {
-    getRandomEnemy();
+function placePokemon(arena) {
     arena.innerHTML = '';
-    playersTurn = true;
     setTimeout(function () {
         arena.innerHTML += spritesHTML();
     }, 600);
+    
+}
+
+/**
+ * Sets the player's and enemy's health to the base stat of their current pokemon.
+ */
+function setPrefightValues() {
+    playersTurn = true; // If player fights again, this resets the turn.
     setPlayerHealth();
     setEnemyHealth();
     renderArenaMenu(arena);
 }
 
 /**
- * Returns two images depicting the pokemon of the player and the enemy
+ * Returns two images depicting the pokemon of the player and the enemy 
  * @returns
  */
 function spritesHTML() {
@@ -76,17 +171,22 @@ function closeArena(event) {
 }
 
 
+/**
+ * Sets player health in fight.js to the base stat of the player's current pokemon.
+ */
 function setPlayerHealth() {
     currentPlayerHealth = pokemons[idPlayer].stats[0].base_stat;
 }
 
-
+/**
+ * Sets enemy health in fight.js to the base stat of the enemy's current pokemon.
+ */
 function setEnemyHealth() {
     currentEnemyHealth = pokemons[idEnemy].stats[0].base_stat;
 }
 
 /**
- * 
+ * Html template function.
  * @param {*} arena 
  */
 function renderArenaMenu(arena) {
@@ -108,9 +208,9 @@ function renderArenaMenu(arena) {
             <div class="arena-menu-left">
                 <div class="move-buttons">
                     <button class="attackbtn attackbtn-inactive no-bottombr" id="attackbtn">attack</button>
-                    <button class="movebtn no-br" id="move1" onclick="lockMove('move1', ${idPlayer})">${pokemons[idPlayer].moves[0].move.name}</button>
-                    <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${checkArenaAbility(1)}</button>
-                    <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${checkArenaAbility(2)}</button>
+                    <button class="movebtn no-br" id="move1" onclick="lockMove('move1', ${idPlayer})">${returnValidMoveName(0)}</button>
+                    <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${returnValidMoveName(1)}</button>
+                    <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${returnValidMoveName(2)}</button>
                 </div>
             </div>
             <div class="arena-menu-right">
@@ -122,45 +222,22 @@ function renderArenaMenu(arena) {
 }
 
 /**
- * 
- * @param {*} index 
- * @returns 
+ * Checks if a pokemon has a move at a specific index (some only have 1 move for example).
+ * @param {*} index as integer.
+ * @returns name of the move.
  */
-function checkArenaAbility(index) {
-    if (pokemons[idPlayer].moves[index]) {
-        return `${pokemons[idPlayer].moves[index].move.name}`;
-    } else {
-        return '';
-    }
+function returnValidMoveName(index) {
+    return playerMoves[index] ? playerMoves[index].name : playerMoves[0].name;
 }
+
 
 /**
- * 
- * @param {*} index 
- * @returns 
- */
-function checkArenaAbilityUrl(index) {
-    if (pokemons[idPlayer].moves[index]) {
-        return `${pokemons[idPlayer].moves[index].move.url}`;
-    } else {
-        return '';
-    }
-}
-
-
-function activateAttackBtn() {
-    let attackbtn = document.getElementById('attackbtn');
-    attackbtn.classList.remove('attackbtn-inactive');
-    attackbtn.setAttribute('onclick', 'startAttack()');
-}
-
-/**
- * 
+ * Highlights the move that is selected by the player.
  * @param {*} moveId 
  */
 function hightlightMove(moveId) {
     for (let i = 1; i < 4; i++) {
-        let removeHighlight = document.getElementById("move"+i);
+        let removeHighlight = document.getElementById("move" + i);
         removeHighlight.setAttribute('style', 'border: none;')
     }
     let highlightedMove = document.getElementById(moveId);
