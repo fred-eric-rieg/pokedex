@@ -22,12 +22,13 @@ function getRandomEnemy() {
     if (pokemons.length < 22) {
         let randomId = Math.floor(Math.random() * 21);
         randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId > 20 ? randomId - 1 : randomId; // Prevents id 20.
         idEnemy = randomId;
     } else if (pokemons.length > 21) {
         let randomId = Math.floor(Math.random() * 152);
         randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId > 151 ? randomId - 1 : randomId; // Prevents id 152.
         idEnemy = randomId;
-        console.log(randomId);
     }
 }
 
@@ -208,9 +209,9 @@ function renderArenaMenu(arena) {
             <div class="arena-menu-left">
                 <div class="move-buttons">
                     <button class="attackbtn attackbtn-inactive no-bottombr" id="attackbtn">attack</button>
-                    <button class="movebtn no-br" id="move1" onclick="lockMove('move1', ${idPlayer})">${returnValidMoveName(0)}</button>
-                    <button class="movebtn no-br" id="move2" onclick="lockMove('move2', ${idPlayer})">${returnValidMoveName(1)}</button>
-                    <button class="movebtn no-topbr" id="move3" onclick="lockMove('move3', ${idPlayer})">${returnValidMoveName(2)}</button>
+                    <button class="movebtn no-br" id="move0" onclick="lockMove('move${returnValidMoveIndex(0)}', ${returnValidMoveIndex(0)})">${returnValidMoveName(0)}</button>
+                    <button class="movebtn no-br" id="move1" onclick="lockMove('move${returnValidMoveIndex(1)}', ${returnValidMoveIndex(1)})">${returnValidMoveName(1)}</button>
+                    <button class="movebtn no-topbr" id="move2" onclick="lockMove('move${returnValidMoveIndex(2)}', ${returnValidMoveIndex(2)})">${returnValidMoveName(2)}</button>
                 </div>
             </div>
             <div class="arena-menu-right">
@@ -224,22 +225,17 @@ function renderArenaMenu(arena) {
 /**
  * Checks if a pokemon has a move at a specific index (some only have 1 move for example).
  * @param {*} index as integer.
- * @returns name of the move.
+ * @returns an index as number.
+ */
+function returnValidMoveIndex(index) {
+    return playerMoves[index] ? index : 0;
+}
+
+/**
+ * Checks if a pokemon has a move at a specific index (some only have 1 move for example).
+ * @param {*} index as integer.
+ * @returns name of the move as string.
  */
 function returnValidMoveName(index) {
     return playerMoves[index] ? playerMoves[index].name : playerMoves[0].name;
-}
-
-
-/**
- * Highlights the move that is selected by the player.
- * @param {*} moveId 
- */
-function hightlightMove(moveId) {
-    for (let i = 1; i < 4; i++) {
-        let removeHighlight = document.getElementById("move" + i);
-        removeHighlight.setAttribute('style', 'border: none;')
-    }
-    let highlightedMove = document.getElementById(moveId);
-    highlightedMove.setAttribute('style', 'border: 2px solid black');
 }

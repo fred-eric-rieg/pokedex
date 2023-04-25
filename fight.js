@@ -3,6 +3,7 @@ let currentEnemyHealth = 0;
 
 let chosenAttackName = '';
 let chosenAttackDmg = 0;
+let chosenAttacHitChance = 0;
 
 let chosenEnemyAttackName = '';
 let chosenEnemyAttackDmg = 0;
@@ -12,38 +13,41 @@ let playersTurn = true;
 /**
  * Called when player selects a move.
  */
-function lockMove(moveId) {
-    playSound(click);
-    if (moveId == 'move1') {
-        chosenAttackName = returnValidMoveName(0);
+function lockMove(moveId, index) {
+    if (playersTurn) {
+        playSound(click);
+        chosenAttackName = returnValidMoveName(index);
         hightlightMove(moveId);
         writeAttackDescription('move', idPlayer);
         activateAttackBtn();
-        loadMove(pokemons[idPlayer].moves[0].move.url, "player");
-    } else if (moveId == 'move2') {
-        chosenAttackName = returnValidMoveName(1);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(1), "player");
-    } else if (moveId == 'move3') {
-        chosenAttackName = returnValidMoveName(2);
-        hightlightMove(moveId);
-        writeAttackDescription('move', idPlayer);
-        activateAttackBtn();
-        loadMove(checkArenaAbilityUrl(2), "player");
+        chosenAttackDmg = playerMoves[index].power;
+        chosenAttacHitChance = playerMoves[index].accuracy;
     }
 }
 
 /**
- * Called when player clicks the attack button
+ * Highlights the move that is selected by the player.
+ * @param {*} moveId 
+ */
+function hightlightMove(moveId) {
+    for (let i = 0; i < 3; i++) {
+        let removeHighlight = document.getElementById("move" + i);
+        removeHighlight.setAttribute('style', 'border: none;')
+    }
+    let highlightedMove = document.getElementById(moveId);
+    highlightedMove.setAttribute('style', 'border: 2px solid black');
+}
+
+/**
+ * Called when player clicks the attack-button. Starts the attack animation & calculation process.
  */
 function startAttack() {
     if (playersTurn) {
+        playersTurn = false;
         deactivateAttackBtn();
         playSound(attack);
         playSound(click);
-        calculateDamageToEnemy();
+        currentEnemyHealth -= calculateDamageToEnemy();
         writeAttackDescription('', idPlayer);
         visualiseAttackEffect(idPlayer);
         setTimeout(function () {
@@ -54,13 +58,18 @@ function startAttack() {
     }
 }
 
-
+/**
+ * Damage is calculated by the following formula:
+ * attack = (attack * attackStat / 100) - (defense * 0.5)
+ * If the damage is below 1, it is set to 1.
+ */
 function calculateDamageToEnemy() {
-    currentEnemyHealth -= Math.floor(chosenAttackDmg
-        * pokemons[idEnemy].stats[2].base_stat / 100
-        * pokemons[idPlayer].stats[1].base_stat / 100);
-}
+    let damage = Math.floor(chosenAttackDmg
+        * pokemons[idPlayer].stats[1].base_stat / 100
+        - pokemons[idEnemy].stats[2].base_stat * 0.5);
 
+    return damage > 0 ? damage : damage = 1;
+}
 
 /**
  * Activates the attack button and sets the onclick attribute to startAttack().
@@ -114,7 +123,6 @@ function checkIfDead(id) {
             updateHealthpoints(idPlayer, "alive");
             visualiseHitEffect(champion);
             setTimeout(function () {
-                playersTurn = true;
                 writeAttackDescription("Choose your attack!", idPlayer);
             }, 2000);
         }
@@ -216,7 +224,7 @@ function visualiseHitEffect(pokemon) {
 }
 
 /**
- * 
+ * Starts the enemie's attack process.
  */
 function startEnemyAttack() {
     playSound(attack);
@@ -225,7 +233,7 @@ function startEnemyAttack() {
     setTimeout(function () {
         visualiseHitEffect(champion);
         writeAttackDescription("move", idEnemy);
-        claculateEnemyDamage();
+        currentPlayerHealth -= claculateDamageToPlayer();
         setTimeout(function () {
             writeAttackDescription("", idEnemy);
         }, 1000);
@@ -233,72 +241,83 @@ function startEnemyAttack() {
     }, 1000);
 }
 
-
+/**
+ * Chooses a random attack from the enemy's move array (1-3).
+ * Sets dmg and name variables accordingly.
+ */
 function chooseEnemyAttack() {
     randomIndex = Math.floor(Math.random() * 3);
-    chosenEnemyAttackName = pokemons[idEnemy].moves[randomIndex].move.name;
-    loadMoveEnemy(pokemons[idEnemy].moves[randomIndex].move.url);
-}
-
-
-function claculateEnemyDamage() {
-    currentPlayerHealth -= Math.floor(chosenEnemyAttackDmg
-        * pokemons[idPlayer].stats[2].base_stat / 100
-        * pokemons[idEnemy].stats[1].base_stat / 100);
+    chosenEnemyAttackName = enemyMoves[randomIndex].name;
+    chosenEnemyAttackDmg = enemyMoves[randomIndex].power;
 }
 
 /**
- * 
- * @param {*} url 
+ * Calculates the damage to the player's health with formular:
+ * attack = (attack * attackStat / 100) * (defense / 100)
+ * @returns number.
  */
-async function loadMoveEnemy(url) {
-    let newUrl = url;
-    let response = await fetch(newUrl);
-    move = await response.json();
-    chosenEnemyAttackDmg = move.power;
+function claculateDamageToPlayer() {
+    let damage = Math.floor(chosenEnemyAttackDmg
+        * pokemons[idEnemy].stats[1].base_stat / 100
+        - pokemons[idPlayer].stats[2].base_stat * 0.5);
+
+    return damage > 0 ? damage : damage = 1;
 }
 
 /**
- * 
- * @param {*} type 
- * @param {*} id 
+ * Handles the attack description box output.
+ * @param {*} type as string.
+ * @param {*} id as number.
  */
 function writeAttackDescription(type, id) {
-    let attackDescription = document.getElementById('attackDescription');
-    if (id == idPlayer) {
-        if (type == "move") {
-            attackDescription.innerHTML = chosenAttackName;
-        } else if (type == "Choose your attack!") {
-            attackDescription.innerHTML = "Choose your attack!";
-            chosenAttackName = '';
-            chosenAttackDmg = 0;
-        } else {
-            attackDescription.innerHTML = `
-                ${pokemons[idPlayer].name} inflicted ${Math.floor(chosenAttackDmg
-                    * pokemons[idEnemy].stats[2].base_stat / 100
-                    * pokemons[idPlayer].stats[1].base_stat / 100)} dmg
-                `;
-        }
+    id == idPlayer ? handlePlayerAttackDescription(type) : handleEnemyAttackDescription(type);
+}
+
+
+function handlePlayerAttackDescription(type) {
+    if (type == "move") {
+        showAttackName('player');
+    } else if (type == "Choose your attack!") {
+        resetAttack();
     } else {
-        if (type == "move") {
-            attackDescription.innerHTML = `${pokemons[idEnemy].name} chooses ${chosenEnemyAttackName}`;
-        } else {
-            attackDescription.innerHTML = `
-                ${pokemons[idEnemy].name} inflicted ${Math.floor(chosenEnemyAttackDmg
-                    * pokemons[idPlayer].stats[2].base_stat / 100
-                    * pokemons[idEnemy].stats[1].base_stat / 100)} dmg
-                `;
-        }
+        showAttackDamage('player');
     }
 }
 
 
-async function loadMove(url, who) {
-    let newUrl = url;
-    let response = await fetch(newUrl);
-    move = await response.json();
-    chosenAttackDmg = move.power;
-    if (who == "player") activateAttackBtn();
+function handleEnemyAttackDescription(type) {
+    type == "move" ? showAttackName('enemy') : showAttackDamage('enemy');
+}
+
+
+function showAttackName(from) {
+    let attackDescription = document.getElementById('attackDescription');
+    from == 'player' ?
+        attackDescription.innerHTML = chosenAttackName
+        : attackDescription.innerHTML = `${pokemons[idEnemy].name} chooses ${chosenEnemyAttackName}`;
+}
+
+
+function resetAttack() {
+    let attackDescription = document.getElementById('attackDescription');
+    attackDescription.innerHTML = "Choose your attack!";
+    chosenAttackName = '';
+    chosenAttackDmg = 0;
+    chosenAttacHitChance = 0;
+    setTimeout(function () {
+        playersTurn = true;
+    }, 1000);
+    
+}
+
+
+function showAttackDamage(from) {
+    let attackDescription = document.getElementById('attackDescription');
+    from == 'player' ?
+        attackDescription.innerHTML = `${pokemons[idPlayer].name} inflicted ${calculateDamageToEnemy()} dmg`
+        : attackDescription.innerHTML = `
+        ${pokemons[idEnemy].name} inflicted ${claculateDamageToPlayer()} dmg
+        `;
 }
 
 
