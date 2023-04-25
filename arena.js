@@ -21,12 +21,14 @@ function openArena(id) {
 function getRandomEnemy() {
     if (pokemons.length < 22) {
         let randomId = Math.floor(Math.random() * 21);
-        randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId == 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId == idPlayer ? randomId + 1 : randomId; // Prevents id of player.
         randomId > 20 ? randomId - 1 : randomId; // Prevents id 20.
         idEnemy = randomId;
     } else if (pokemons.length > 21) {
         let randomId = Math.floor(Math.random() * 152);
-        randomId = 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId == 0 ? randomId + 1 : randomId; // Prevents id 0.
+        randomId == idPlayer ? randomId + 1 : randomId; // Prevents id of player.
         randomId > 151 ? randomId - 1 : randomId; // Prevents id 152.
         idEnemy = randomId;
     }
@@ -155,8 +157,8 @@ function setPrefightValues() {
 function spritesHTML() {
     return `
         <div style="position:relative;top:-120px;">
-            <img id="champion" style="height:150px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
-            <img id="opponent" style="height:150px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
+            <img id="champion" style="height:160px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
+            <img id="opponent" style="height:140px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
         </div>
     `;
 }
@@ -170,7 +172,6 @@ function closeArena(event) {
     hideOverlayDelayed(event);
     playersTurn = true;
 }
-
 
 /**
  * Sets player health in fight.js to the base stat of the player's current pokemon.

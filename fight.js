@@ -89,54 +89,79 @@ function deactivateAttackBtn() {
 }
 
 /**
- * 
+ * Checking status of the enemy and the player after the attack. Starts a specific animation depending on the outcome.
  * @param {*} id
  */
 function checkIfDead(id) {
     if (id == idEnemy) {
         if (currentEnemyHealth < 1) {
-            playSound(dead);
-            updateHealthpoints(idEnemy, "dead");
-            visualiseDeath(idEnemy);
-            displayWinner();
-            setTimeout(function () {
-                closeArena();
-                hideWinner();
-            }, 2000);
+            enemyIsDead();
         } else {
-            updateHealthpoints(idEnemy, "alive");
-            visualiseHitEffect(opponent);
-            setTimeout(function () {
-                playersTurn = false;
-                startEnemyAttack();
-            }, 2000);
+            enemyStillAlive();
         }
-    } else {
+    } else if (id == idPlayer) {
         if (currentPlayerHealth < 1) {
-            playSound(dead);
-            updateHealthpoints(idPlayer, "dead");
-            visualiseDeath(idPlayer);
-            setTimeout(function () {
-                closeArena();
-            }, 2000);
+            playerIsDead();
         } else {
-            updateHealthpoints(idPlayer, "alive");
-            visualiseHitEffect(champion);
-            setTimeout(function () {
-                writeAttackDescription("Choose your attack!", idPlayer);
-            }, 2000);
+            playerStillAlive();
         }
     }
 }
 
+
+function enemyIsDead() {
+    playSound(dead);
+    updateHealthpoints(idEnemy, "dead");
+    visualiseDeath(idEnemy);
+    displayWinner();
+    setTimeout(function () {
+        closeArena();
+        hideWinner();
+    }, 2000);
+}
+
+
+function enemyStillAlive() {
+    updateHealthpoints(idEnemy, "alive");
+    visualiseHitEffect(opponent);
+    setTimeout(function () {
+        playersTurn = false;
+        startEnemyAttack();
+    }, 2000);
+}
+
+
+function playerIsDead() {
+    playSound(dead);
+    updateHealthpoints(idPlayer, "dead");
+    visualiseDeath(idPlayer);
+    setTimeout(function () {
+        closeArena();
+    }, 2000);
+}
+
+
+function playerStillAlive() {
+    updateHealthpoints(idPlayer, "alive");
+    visualiseHitEffect(champion);
+    setTimeout(function () {
+        writeAttackDescription("Choose your attack!", idPlayer);
+    }, 2000);
+}
+
 /**
- * 
- * @param {*} id 
- * @param {*} status 
+ * Updating healthbars and healthpoints.
+ * @param {*} id as string.
+ * @param {*} status as string.
  */
 function updateHealthpoints(id, status) {
+    checkOnEnemyHealth(id, status);
+    checkOnPlayerHealth(id, status);
+}
+
+
+function checkOnEnemyHealth(id, status) {
     let enemyHealth = document.getElementById('innerEnemy');
-    let playerHealth = document.getElementById('innerPlayer');
     if (id == idEnemy & status == "dead") {
         enemyHealth.setAttribute('style', `width:0px;`);
         enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
@@ -145,6 +170,11 @@ function updateHealthpoints(id, status) {
         enemyHealth.setAttribute('style', `width:${Math.floor(currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat)}px;`);
         enemyHealth.innerHTML = `${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}`;
     }
+}
+
+
+function checkOnPlayerHealth(id, status) {
+    let playerHealth = document.getElementById('innerPlayer');
     if (id == idPlayer & status == "dead") {
         playerHealth.setAttribute('style', `width:0px;`);
         playerHealth.innerHTML = `0/${pokemons[idPlayer].stats[0].base_stat}`;
@@ -156,8 +186,8 @@ function updateHealthpoints(id, status) {
 }
 
 /**
- * 
- * @param {*} id 
+ * Adds a css class to either the enemy or the player to visualise the hit effect.
+ * @param {*} id as string.
  */
 function visualiseDeath(id) {
     if (id == idEnemy) {
@@ -176,38 +206,54 @@ function visualiseDeath(id) {
 }
 
 /**
- * 
- * @param {*} id 
+ * @param {*} id as string.
  */
 function visualiseAttackEffect(id) {
-    let opponent = document.getElementById('opponent');
-    let champion = document.getElementById('champion');
     if (id == idPlayer) {
-        for (let i = 1; i < 4; i++) {
-            setTimeout(function () {
-                champion.classList.remove('move-img-left');
-                champion.classList.add('move-img-right');
-            }, i * 100)
-            setTimeout(function () {
-                champion.classList.remove('move-img-right');
-                champion.classList.add('move-img-left');
-            }, i * 200);
-        };
+        putEffectOnPlayer();
     } else {
-        for (let i = 1; i < 4; i++) {
-            setTimeout(function () {
-                opponent.classList.remove('move-img-right');
-                opponent.classList.add('move-img-left');
-            }, i * 100)
-            setTimeout(function () {
-                opponent.classList.remove('move-img-left');
-                opponent.classList.add('move-img-right');
-            }, i * 200);
-        };
+        putEffectOnEnemy();
     }
 }
 
+/**
+ * Adds a css class to the player to visualize a attack effect.
+ */
+function putEffectOnPlayer() {
+    let champion = document.getElementById('champion');
+    for (let i = 1; i < 4; i++) {
+        setTimeout(function () {
+            champion.classList.remove('move-img-left');
+            champion.classList.add('move-img-right');
+        }, i * 100)
+        setTimeout(function () {
+            champion.classList.remove('move-img-right');
+            champion.classList.add('move-img-left');
+        }, i * 200);
+    };
+}
 
+/**
+ * Adds a css class to the enemy to visualize a attack effect.
+ */
+function putEffectOnEnemy() {
+    let opponent = document.getElementById('opponent');
+    for (let i = 1; i < 4; i++) {
+        setTimeout(function () {
+            opponent.classList.remove('move-img-right');
+            opponent.classList.add('move-img-left');
+        }, i * 100)
+        setTimeout(function () {
+            opponent.classList.remove('move-img-left');
+            opponent.classList.add('move-img-right');
+        }, i * 200);
+    };
+}
+
+/**
+ * Adds and removes a css class to visualize a hit effect.
+ * @param {*} pokemon as html object.
+ */
 function visualiseHitEffect(pokemon) {
     pokemon.classList.add('hit');
     for (let i = 1; i < 6; i++) {
@@ -238,7 +284,7 @@ function startEnemyAttack() {
             writeAttackDescription("", idEnemy);
         }, 1000);
         checkIfDead(idPlayer);
-    }, 1000);
+    }, 500);
 }
 
 /**
@@ -307,16 +353,16 @@ function resetAttack() {
     setTimeout(function () {
         playersTurn = true;
     }, 1000);
-    
+
 }
 
 
 function showAttackDamage(from) {
     let attackDescription = document.getElementById('attackDescription');
     from == 'player' ?
-        attackDescription.innerHTML = `${pokemons[idPlayer].name} inflicted ${calculateDamageToEnemy()} dmg`
+        attackDescription.innerHTML = `You inflicted ${calculateDamageToEnemy()} dmg`
         : attackDescription.innerHTML = `
-        ${pokemons[idEnemy].name} inflicted ${claculateDamageToPlayer()} dmg
+        It inflicted ${claculateDamageToPlayer()} dmg
         `;
 }
 
