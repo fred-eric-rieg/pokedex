@@ -62,7 +62,7 @@ function renderWithTimeout() {
     setTimeout(function () {
         canvas.innerHTML = '';
         for (let i = 0; i < pokemons.length; i++) {
-            renderPokemon(pokemons[i], i);
+            renderPokemon(pokemons[i], i+1);
         }
     }, 2000);
 }
