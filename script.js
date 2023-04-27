@@ -12,11 +12,11 @@ function loadMore() {
     if (pokemons.length < 22) {
         let loadbtn = document.getElementById('loadbtn');
         loadbtn.innerHTML = "loading completed";
+        loadbtn.style.background = 'purple';
+        loadbtn.style.cursor = 'default';
         pokemons = [];
         playSound(click);
         getPokemons(151);
-    } else {
-        playSound(cancel);
     }
 }
 
@@ -146,7 +146,11 @@ function renderSinglePokemon(id) {
                     <span>#${id}<br><b>${pokemons[id - 1].name.toUpperCase()}</b></span>
                     <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
-                <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.front_default}">
+                <div class="arrow-img-arrow">
+                    <div class="arrow" onclick="previousPokemon(${id})"><</div>
+                    <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.front_default}">
+                    <div clasS="arrow" onclick="nextPokemon(${id})">></div>
+                </div>
                 <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[0].base_stat}px;">${pokemons[id - 1].stats[0].base_stat}</div></div></div>
                 <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[1].base_stat}px;">${pokemons[id - 1].stats[1].base_stat}</div></div></div>
                 <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[2].base_stat}px;">${pokemons[id - 1].stats[2].base_stat}</div></div></div>
@@ -265,3 +269,32 @@ function hideOverlay(event) {
 function maintainOverlay(event) {
     event.stopPropagation();
 }
+
+
+/**
+ * Selects the previous Pokemon in the list. If the list is 151 long, it will go from 151 to 1 and back.
+ * If the list is 20 long, it will go from 20 to 1 and back.
+ * @param {*} id as number. 
+ */
+function previousPokemon(id) {
+    if (pokemons.length == 151) {
+        id == 1 ? id = 151 : id = id - 1;
+    } else {
+        id == 1 ? id = 20 : id = id - 1;
+    }
+    showPokemon(id);
+}
+
+/**
+ * Selects the next Pokemon in the list. If the list is 151 long, it will go from 1 to 151 and back.
+ * If the list is 20 long, it will go from 1 to 20 and back.
+ * @param {*} id as number. 
+ */
+function nextPokemon(id) {
+    if (pokemons.length == 151) {
+        id == 151 ? id = 1 : id = id + 1;
+    } else {
+        id == 20 ? id = 1 : id = id + 1;
+    }
+    showPokemon(id);
+} 

@@ -2,7 +2,7 @@ body {
     margin: 0;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     box-sizing: border-box;
-    background: rgb(55, 55, 55);
+    background: rgb(25, 25, 25);
 }
 
 h1 {
@@ -27,6 +27,22 @@ a {
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.6);
+}
+
+.arrow-img-arrow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.arrow {
+    height: 2rem;
+    cursor: pointer;
+    position: relative;
+    top: calc(50% - 2rem);
+    z-index: 3;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .mini-canvas {
@@ -72,7 +88,7 @@ a {
 }
 
 footer {
-    background: rgb(55, 55, 55);
+    background: rgb(25, 25, 25);
     color: white;
     display: flex;
     justify-content: center;
@@ -379,5 +395,11 @@ footer {
     .big {
         width: 100vw;
         height: 100vh;
+    }
+}
+
+@media screen and (width < 600px) {
+    .arena {
+        border-radius: unset;
     }
 }
