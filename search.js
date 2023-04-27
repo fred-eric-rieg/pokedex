@@ -31,7 +31,7 @@ function compareUserInput(userInput) {
 function comparePokemons(userInput, i) {
     if (pokemons[i].name.includes(userInput)) {
         searchResults.push(pokemons[i]);
-        searchIds.push(i);
+        searchIds.push(i+1);
     }
 }
 
