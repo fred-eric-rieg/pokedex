@@ -8,6 +8,7 @@ let enemyMoves = [];
  * @param {*} id 
  */
 function openArena(id) {
+    keyPressNavigation = false;
     idPlayer = id - 1;
     getRandomEnemy();
     hideMinicanvasAndShowArena();

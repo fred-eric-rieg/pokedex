@@ -4,6 +4,19 @@ let currentPokemon;
 // Collects all pokemon that were fetched.
 let pokemons = [];
 
+// Activates keypress navigation when user clicks on a small pokemon card.
+let keyPressNavigation = false;
+let keyPressPokemonId;
+
+// Eventlistener for keypress navigation.
+window.addEventListener('keydown', function (e) {
+    if (e.key == 'ArrowRight' && keyPressNavigation) {
+        nextPokemon(keyPressPokemonId);
+    } else if (e.key == 'ArrowLeft' && keyPressNavigation) {
+        previousPokemon(keyPressPokemonId);
+    }
+});
+
 
 /**
  * Onclick function of loadbtn in index.html that loads the remaining pokemon if user clickes on it.
@@ -126,6 +139,8 @@ function changeColor(type, id) {
 function showPokemon(id) {
     playSound(click);
     playSound(soundtrack);
+    keyPressNavigation = true;
+    keyPressPokemonId = id;
     let overlay = document.getElementById('overlay');
     overlay.classList.remove('d-none');
     let miniCanvas = document.getElementById('miniCanvas');
@@ -251,6 +266,7 @@ function overlayTimeout(overlay, arena) {
  */
 function hideOverlay(event) {
     event.stopPropagation();
+    keyPressNavigation = false;
     let overlay = document.getElementById('overlay');
     let miniCanvas = document.getElementById('miniCanvas');
     overlay.classList.add('d-none');
