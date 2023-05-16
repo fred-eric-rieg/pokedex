@@ -241,7 +241,7 @@ function hideOverlayDelayed(event) {
     arena.classList.add('small');
     arena.innerHTML = '';
     pauseSound(fight);
-    overlay.setAttribute('onclick', 'hideOverlay();');
+    overlay.setAttribute('onclick', 'hideOverlay(event);');
 }
 
 /**
