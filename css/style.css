@@ -65,7 +65,7 @@ a {
     align-items: center;
     justify-content: center;
     background: rgb(204, 1, 99);
-    background-image: url(img/background.jpg);
+    background-image: url(../img/background.jpg);
 }
 
 .wrap {
@@ -331,7 +331,7 @@ footer {
 }
 
 .winner {
-    background-image: url(img/winner.png);
+    background-image: url(../img/winner.png);
 }
 
 .loading {
