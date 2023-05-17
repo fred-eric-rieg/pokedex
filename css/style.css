@@ -157,7 +157,7 @@ footer {
     height: 1px;
     background: #ccc;
     transition: all 1s ease-in;
-    background-image: url('/img/arena.jpg');
+    background-image: url('../img/arena.jpg');
     background-position: center -100px;
     background-size: cover;
 }
