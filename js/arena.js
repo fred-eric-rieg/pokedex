@@ -195,7 +195,7 @@ function setEnemyHealth() {
 function renderArenaMenu(arena) {
     arena.innerHTML += `
         <button class="btn" style="position:relative;top:-100px;" onclick="closeArena(event)">close</button>
-        <div style="display:flex;justify-content:space-between;gap:50px;">
+        <div style="display:flex;justify-content:space-between;gap:50px;color:white;">
             <div>
                 ${pokemons[idPlayer].name} hp
                 <div class="stats"><div class="outer"><div class="inner" id="innerPlayer" style="width:${currentPlayerHealth * 100 / pokemons[idPlayer].stats[0].base_stat}px;">${currentPlayerHealth}/${pokemons[idPlayer].stats[0].base_stat}</div></div></div>

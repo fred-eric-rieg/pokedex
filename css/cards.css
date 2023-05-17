@@ -43,15 +43,15 @@
     width:100px;
     padding: 2px;
     background:black;
-    border-radius: 25px;
+    border-radius: 12px;
 }
 
 .inner {
     color: white;
     display: flex;
     background:green;
-    border-radius: 15px;
-    padding-left: 2px;
+    border-radius: 10px;
+    padding-left: 0.5rem;
 }
 
 .type {

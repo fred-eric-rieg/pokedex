@@ -157,6 +157,9 @@ footer {
     height: 1px;
     background: #ccc;
     transition: all 1s ease-in;
+    background-image: url('/img/arena.jpg');
+    background-position: center -100px;
+    background-size: cover;
 }
 
 .big {
@@ -218,19 +221,26 @@ footer {
     position: relative;
     bottom: -240px;
     display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 1rem;
 }
 
 .arena-menu-right {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     overflow-wrap: break-word;
     width: 150px;
-    padding-left: 16px;
+    height: 100px;
+    padding: 16px;
+    background: white;
+    border-radius: 1rem;
 }
 
 .arena-menu-left {
+    box-sizing: border-box;
     width: 150px;
-    padding: 16px;
 }
 
 .no-br {
