@@ -157,7 +157,7 @@ function setPrefightValues() {
  */
 function spritesHTML() {
     return `
-        <div style="position:relative;top:-120px;">
+        <div style="position:relative;top:-120px;display:flex;">
             <img id="champion" style="height:160px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
             <img id="opponent" style="height:140px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
         </div>
