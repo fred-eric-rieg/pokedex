@@ -41,11 +41,11 @@ function muteSoundtrack() {
         mute = true;
         soundtrack.volume = 0;
         fight.volume = 0;
-        mutebtn.innerHTML = 'play music';
+        mutebtn.style.backgroundImage = "url('img/mute.svg')";
     } else {
         mute = false;
         soundtrack.volume = 0.05;
         fight.volume = 0.05;
-        mutebtn.innerHTML = 'no music';
+        mutebtn.style.backgroundImage = "url('img/sound.svg')";
     }
 }

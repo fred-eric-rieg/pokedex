@@ -332,12 +332,20 @@ footer {
 }
 
 .mutebtn {
+    transition: all 125ms ease-in-out;
     background: rgb(204, 1, 99);
     color: white;
     border: none;
     border-radius: 15px;
     height: 40px;
+    width: 40px;
     cursor: pointer;
+    background-image: url(../img/sound.svg);
+}
+
+.mutebtn:hover {
+    transition: all 125ms ease-in-out;
+    transform: scale(1.1);
 }
 
 .winner {
