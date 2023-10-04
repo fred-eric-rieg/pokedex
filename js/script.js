@@ -2,7 +2,7 @@
 let currentPokemon;
 
 // Collects all pokemon that were fetched.
-let pokemons = [];
+let allPokemons = [];
 
 // Activates keypress navigation when user clicks on a small pokemon card.
 let keyPressNavigation = false;
@@ -22,12 +22,12 @@ window.addEventListener('keydown', function (e) {
  * Onclick function of loadbtn in index.html that loads the remaining pokemon if user clickes on it.
  */
 function loadMore() {
-    if (pokemons.length < 22) {
+    if (allPokemons.length == 20) {
         let loadbtn = document.getElementById('loadbtn');
         loadbtn.innerHTML = "loading completed";
         loadbtn.style.background = 'purple';
         loadbtn.style.cursor = 'default';
-        pokemons = [];
+        allPokemons = [];
         playSound(click);
         getPokemons(151);
     }
@@ -90,6 +90,7 @@ function renderPokemon(pokemons) {
     let canvas = document.getElementById('canvas');
     pokemons.length == 20 ? canvas.innerHTML = '' : null;
     pokemons.forEach(pokemon => {
+        allPokemons.push(pokemon);
         canvas.innerHTML += templateHTML(pokemon);
         changeTypeColor(pokemon, pokemon.id);
     });
@@ -99,7 +100,7 @@ function renderPokemon(pokemons) {
 function templateHTML(currentPokemon) {
     return `
         <div class="wrap">
-            <div class="card" id="card${currentPokemon.id}" onclick="showPokemon(${currentPokemon.id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${currentPokemon.id})">
+            <div class="card" id="card${currentPokemon.id}" onclick="showPokemon(${currentPokemon.id - 1})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${currentPokemon.id})">
                 <span>#${currentPokemon.id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
                 <div class="type" id="types${currentPokemon.id}">${currentPokemon.types[0].type.name.toUpperCase()}</div>
@@ -156,7 +157,7 @@ function showPokemon(id) {
     overlay.classList.remove('d-none');
     let miniCanvas = document.getElementById('miniCanvas');
     miniCanvas.innerHTML = '';
-    miniCanvas.innerHTML = renderSinglePokemon(id);;
+    miniCanvas.innerHTML = renderSinglePokemon(allPokemons[id]);
 }
 
 /**
@@ -164,24 +165,24 @@ function showPokemon(id) {
  * @param {*} id as integer.
  * @returns html template of a single large pokemon card.
  */
-function renderSinglePokemon(id) {
+function renderSinglePokemon(pokemon) {
     return `
         <div class="wrap-nohover">
-            <div class="card-nohover" id="card${id}">
+            <div class="card-nohover" id="card${pokemon.id}">
                 <div style="display:flex;justify-content:space-between;">
-                    <span>#${id}<br><b>${pokemons[id - 1].name.toUpperCase()}</b></span>
+                    <span>#${pokemon.id}<br><b>${pokemon.name.toUpperCase()}</b></span>
                     <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
                 <div class="arrow-img-arrow">
-                    <div class="arrow" onclick="previousPokemon(${id})"><</div>
-                    <img id="img${id}" style="height:150px;object-fit:contain;" src="${pokemons[id - 1].sprites.front_default}">
-                    <div clasS="arrow" onclick="nextPokemon(${id})">></div>
+                    <div class="arrow" onclick="previousPokemon(${pokemon.id})"><</div>
+                    <img id="img${pokemon.id}" style="height:150px;object-fit:contain;" src="${pokemon.sprites.front_default}">
+                    <div clasS="arrow" onclick="nextPokemon(${pokemon.id})">></div>
                 </div>
-                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[0].base_stat}px;">${pokemons[id - 1].stats[0].base_stat}</div></div></div>
-                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[1].base_stat}px;">${pokemons[id - 1].stats[1].base_stat}</div></div></div>
-                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[2].base_stat}px;">${pokemons[id - 1].stats[2].base_stat}</div></div></div>
-                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemons[id - 1].stats[5].base_stat}px;">${pokemons[id - 1].stats[5].base_stat}</div></div></div>
-                <button id="startFight" class="btn" onclick="startFight(event, ${id})">select Champion</button>
+                <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemon.stats[0].base_stat}px;">${pokemon.stats[0].base_stat}</div></div></div>
+                <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemon.stats[1].base_stat}px;">${pokemon.stats[1].base_stat}</div></div></div>
+                <div class="stats">defense <div class="outer"><div class="inner" style="width:${pokemon.stats[2].base_stat}px;">${pokemon.stats[2].base_stat}</div></div></div>
+                <div class="stats">speed <div class="outer"><div class="inner" style="width:${pokemon.stats[5].base_stat}px;">${pokemon.stats[5].base_stat}</div></div></div>
+                <button id="startFight" class="btn" onclick="startFight(event, ${pokemon.id})">select Champion</button>
             </div>
         </div>
     `;
@@ -304,12 +305,7 @@ function maintainOverlay(event) {
  * @param {*} id as number. 
  */
 function previousPokemon(id) {
-    if (pokemons.length == 151) {
-        id == 1 ? id = 151 : id = id - 1;
-    } else {
-        id == 1 ? id = 20 : id = id - 1;
-    }
-    showPokemon(id);
+    allPokemons[id - 1] ? showPokemon(id - 1) : showPokemon(allPokemons.length - 1);
 }
 
 /**
@@ -318,10 +314,5 @@ function previousPokemon(id) {
  * @param {*} id as number. 
  */
 function nextPokemon(id) {
-    if (pokemons.length == 151) {
-        id == 151 ? id = 1 : id = id + 1;
-    } else {
-        id == 20 ? id = 1 : id = id + 1;
-    }
-    showPokemon(id);
+    allPokemons[id + 1] ? showPokemon(id + 1) : showPokemon(0);
 } 
