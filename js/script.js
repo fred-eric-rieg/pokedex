@@ -34,8 +34,7 @@ function loadMore() {
 }
 
 /**
- * Estabilishes connection to pokeapi.co and fetches as many pokemon as stated in the parameters.
- * (On initial load 20 pokemon).
+ * Async fetching of pokemon from server in parallel. Initial load is 20 pokemon.
  * @param {*} amountOfPokemons as integer.
  */
 async function getPokemons(amountOfPokemons) {
@@ -300,8 +299,7 @@ function maintainOverlay(event) {
 
 
 /**
- * Selects the previous Pokemon in the list. If the list is 151 long, it will go from 151 to 1 and back.
- * If the list is 20 long, it will go from 20 to 1 and back.
+ * Selects the previous Pokemon if it exists, otherwise jumps to the last Pokemon in the allPokemon-List.
  * @param {*} id as number. 
  */
 function previousPokemon(id) {
@@ -309,8 +307,7 @@ function previousPokemon(id) {
 }
 
 /**
- * Selects the next Pokemon in the list. If the list is 151 long, it will go from 1 to 151 and back.
- * If the list is 20 long, it will go from 1 to 20 and back.
+ * Selects the next Pokemon if it exists, otherwise jumps to the first Pokemon in the allPokemon-List.
  * @param {*} id as number. 
  */
 function nextPokemon(id) {
