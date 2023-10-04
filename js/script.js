@@ -41,15 +41,23 @@ function loadMore() {
 async function getPokemons(amountOfPokemons) {
     hideCanvas();
     showLoadingScreen();
-    for (let i = 1; i < amountOfPokemons + 1; i++) {
-        let urlPokemon = `https://pokeapi.co/api/v2/pokemon/${i}/`;
-        let response = await fetch(urlPokemon);
-        currentPokemon = await response.json();
-        pokemons.push(currentPokemon);
-        renderPokemon(currentPokemon, i);
-    }
+    const promises = Array.from({ length: amountOfPokemons }, (_, i) => fetchPokemon(i + 1));
+    const pokemons = await Promise.all(promises);
+    renderPokemon(pokemons.filter(p => p !== null).sort((a, b) => a.id - b.id));
     hideLoadingScreen();
     showCanvas();
+}
+
+
+async function fetchPokemon(i) {
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`);
+        const pokemon = await response.json();
+        return pokemon;
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 
@@ -78,20 +86,23 @@ function showCanvas() {
 }
 
 
-function renderPokemon(currentPokemon, id) {
+function renderPokemon(pokemons) {
     let canvas = document.getElementById('canvas');
-    canvas.innerHTML += templateHTML(currentPokemon, id);
-    changeTypeColor(currentPokemon, id);
+    pokemons.length == 20 ? canvas.innerHTML = '' : null;
+    pokemons.forEach(pokemon => {
+        canvas.innerHTML += templateHTML(pokemon);
+        changeTypeColor(pokemon, pokemon.id);
+    });
 }
 
 
-function templateHTML(currentPokemon, id) {
+function templateHTML(currentPokemon) {
     return `
         <div class="wrap">
-            <div class="card" id="card${id}" onclick="showPokemon(${id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${id})">
-                <span>#${id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
+            <div class="card" id="card${currentPokemon.id}" onclick="showPokemon(${currentPokemon.id})" onmouseover="changeColor('${currentPokemon.types[0].type.name}', ${currentPokemon.id})">
+                <span>#${currentPokemon.id}<br><b>${currentPokemon.name.toUpperCase()}</b></span>
                 <img style="height:150px;object-fit:contain;" src="${currentPokemon.sprites.front_default}">
-                <div class="type" id="types${id}">${currentPokemon.types[0].type.name.toUpperCase()}</div>
+                <div class="type" id="types${currentPokemon.id}">${currentPokemon.types[0].type.name.toUpperCase()}</div>
             </div>
         </div>
     `;
