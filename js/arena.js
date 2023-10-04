@@ -20,13 +20,13 @@ function openArena(id) {
  * Generates a random id and sets idEnemy to this id => random enemy to fight player in arena
  */
 function getRandomEnemy() {
-    if (pokemons.length < 22) {
+    if (allPokemons.length < 22) {
         let randomId = Math.floor(Math.random() * 21);
         randomId == 0 ? randomId + 1 : randomId; // Prevents id 0.
         randomId == idPlayer ? randomId + 1 : randomId; // Prevents id of player.
         randomId > 20 ? randomId - 1 : randomId; // Prevents id 20.
         idEnemy = randomId;
-    } else if (pokemons.length > 21) {
+    } else if (allPokemons.length > 21) {
         let randomId = Math.floor(Math.random() * 152);
         randomId == 0 ? randomId + 1 : randomId; // Prevents id 0.
         randomId == idPlayer ? randomId + 1 : randomId; // Prevents id of player.
@@ -64,7 +64,7 @@ async function loadMovesFromAPI() {
  * @returns number of moves the player has.
  */
 function countPlayerMoves() {
-    let moves = pokemons[idPlayer].moves;
+    let moves = allPokemons[idPlayer].moves;
     let counter = 0;
     for (let index = 0; index < moves.length; index++) {
         if (moves[index].move.url != null) {
@@ -78,7 +78,7 @@ function countPlayerMoves() {
  * @returns number of moves the enemy has.
  */
 function countEnemyMoves() {
-    let moves = pokemons[idEnemy].moves;
+    let moves = allPokemons[idEnemy].moves;
     let counter = 0;
     for (let index = 0; index < moves.length; index++) {
         if (moves[index].move.url != null) {
@@ -93,7 +93,7 @@ function countEnemyMoves() {
  * @param {*} index as number.
  */
 async function collectPlayerMoves(index) {
-    let urlPlayer = pokemons[idPlayer].moves[index].move.url;
+    let urlPlayer = allPokemons[idPlayer].moves[index].move.url;
     let responsePlayer = await fetch(urlPlayer);
     let movePlayer = await responsePlayer.json();
     if (movePlayer.power != null) {
@@ -106,7 +106,7 @@ async function collectPlayerMoves(index) {
  * @param {*} index as number.
  */
 async function collectEnemyMoves(index) {
-    let urlEnemy = pokemons[idEnemy].moves[index].move.url;
+    let urlEnemy = allPokemons[idEnemy].moves[index].move.url;
     let responseEnemy = await fetch(urlEnemy);
     let moveEnemy = await responseEnemy.json();
     enemyMoves.push(moveEnemy);
@@ -158,8 +158,8 @@ function setPrefightValues() {
 function spritesHTML() {
     return `
         <div style="position:relative;top:-120px;display:flex;">
-            <img id="champion" style="height:160px;object-fit:contain;" src="${pokemons[idPlayer].sprites.back_default}">
-            <img id="opponent" style="height:140px;object-fit:contain;" src="${pokemons[idEnemy].sprites.front_default}">
+            <img id="champion" style="height:160px;object-fit:contain;" src="${allPokemons[idPlayer].sprites.back_default}">
+            <img id="opponent" style="height:140px;object-fit:contain;" src="${allPokemons[idEnemy].sprites.front_default}">
         </div>
     `;
 }
@@ -178,14 +178,14 @@ function closeArena(event) {
  * Sets player health in fight.js to the base stat of the player's current pokemon.
  */
 function setPlayerHealth() {
-    currentPlayerHealth = pokemons[idPlayer].stats[0].base_stat;
+    currentPlayerHealth = allPokemons[idPlayer].stats[0].base_stat;
 }
 
 /**
  * Sets enemy health in fight.js to the base stat of the enemy's current pokemon.
  */
 function setEnemyHealth() {
-    currentEnemyHealth = pokemons[idEnemy].stats[0].base_stat;
+    currentEnemyHealth = allPokemons[idEnemy].stats[0].base_stat;
 }
 
 /**
@@ -197,13 +197,13 @@ function renderArenaMenu(arena) {
         <button class="btn" style="position:relative;top:-100px;" onclick="closeArena(event)">close</button>
         <div style="display:flex;justify-content:space-between;gap:50px;color:white;">
             <div>
-                ${pokemons[idPlayer].name} hp
-                <div class="stats"><div class="outer"><div class="inner" id="innerPlayer" style="width:${currentPlayerHealth * 100 / pokemons[idPlayer].stats[0].base_stat}px;">${currentPlayerHealth}/${pokemons[idPlayer].stats[0].base_stat}</div></div></div>
+                ${allPokemons[idPlayer].name} hp
+                <div class="stats"><div class="outer"><div class="inner" id="innerPlayer" style="width:${currentPlayerHealth * 100 / allPokemons[idPlayer].stats[0].base_stat}px;">${currentPlayerHealth}/${allPokemons[idPlayer].stats[0].base_stat}</div></div></div>
             </div>
             
             <div>
-                ${pokemons[idEnemy].name} hp
-                <div class="stats"><div class="outer"><div class="inner" id="innerEnemy" style="width:${currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat}px;">${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}</div></div></div>
+                ${allPokemons[idEnemy].name} hp
+                <div class="stats"><div class="outer"><div class="inner" id="innerEnemy" style="width:${currentEnemyHealth * 100 / allPokemons[idEnemy].stats[0].base_stat}px;">${currentEnemyHealth}/${allPokemons[idEnemy].stats[0].base_stat}</div></div></div>
             </div>
         </div>
         

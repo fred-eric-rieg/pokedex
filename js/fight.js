@@ -65,8 +65,8 @@ function startAttack() {
  */
 function calculateDamageToEnemy() {
     let damage = Math.floor(chosenAttackDmg
-        * pokemons[idPlayer].stats[1].base_stat / 100
-        - pokemons[idEnemy].stats[2].base_stat * 0.5);
+        * allPokemons[idPlayer].stats[1].base_stat / 100
+        - allPokemons[idEnemy].stats[2].base_stat * 0.5);
 
     return damage > 0 ? damage : damage = 1;
 }
@@ -164,11 +164,11 @@ function checkOnEnemyHealth(id, status) {
     let enemyHealth = document.getElementById('innerEnemy');
     if (id == idEnemy & status == "dead") {
         enemyHealth.setAttribute('style', `width:0px;`);
-        enemyHealth.innerHTML = `0/${pokemons[idEnemy].stats[0].base_stat}`;
+        enemyHealth.innerHTML = `0/${allPokemons[idEnemy].stats[0].base_stat}`;
     }
     if (id == idEnemy & status == "alive") {
-        enemyHealth.setAttribute('style', `width:${Math.floor(currentEnemyHealth * 100 / pokemons[idEnemy].stats[0].base_stat)}px;`);
-        enemyHealth.innerHTML = `${currentEnemyHealth}/${pokemons[idEnemy].stats[0].base_stat}`;
+        enemyHealth.setAttribute('style', `width:${Math.floor(currentEnemyHealth * 100 / allPokemons[idEnemy].stats[0].base_stat)}px;`);
+        enemyHealth.innerHTML = `${currentEnemyHealth}/${allPokemons[idEnemy].stats[0].base_stat}`;
     }
 }
 
@@ -177,11 +177,11 @@ function checkOnPlayerHealth(id, status) {
     let playerHealth = document.getElementById('innerPlayer');
     if (id == idPlayer & status == "dead") {
         playerHealth.setAttribute('style', `width:0px;`);
-        playerHealth.innerHTML = `0/${pokemons[idPlayer].stats[0].base_stat}`;
+        playerHealth.innerHTML = `0/${allPokemons[idPlayer].stats[0].base_stat}`;
     }
     if (id == idPlayer & status == "alive") {
-        playerHealth.setAttribute('style', `width:${Math.floor(currentPlayerHealth * 100 / pokemons[idPlayer].stats[0].base_stat)}px;`);
-        playerHealth.innerHTML = `${currentPlayerHealth}/${pokemons[idPlayer].stats[0].base_stat}`;
+        playerHealth.setAttribute('style', `width:${Math.floor(currentPlayerHealth * 100 / allPokemons[idPlayer].stats[0].base_stat)}px;`);
+        playerHealth.innerHTML = `${currentPlayerHealth}/${allPokemons[idPlayer].stats[0].base_stat}`;
     }
 }
 
@@ -304,8 +304,8 @@ function chooseEnemyAttack() {
  */
 function claculateDamageToPlayer() {
     let damage = Math.floor(chosenEnemyAttackDmg
-        * pokemons[idEnemy].stats[1].base_stat / 100
-        - pokemons[idPlayer].stats[2].base_stat * 0.5);
+        * allPokemons[idEnemy].stats[1].base_stat / 100
+        - allPokemons[idPlayer].stats[2].base_stat * 0.5);
 
     return damage > 0 ? damage : damage = 1;
 }
@@ -340,7 +340,7 @@ function showAttackName(from) {
     let attackDescription = document.getElementById('attackDescription');
     from == 'player' ?
         attackDescription.innerHTML = chosenAttackName
-        : attackDescription.innerHTML = `${pokemons[idEnemy].name} chooses ${chosenEnemyAttackName}`;
+        : attackDescription.innerHTML = `${allPokemons[idEnemy].name} chooses ${chosenEnemyAttackName}`;
 }
 
 
