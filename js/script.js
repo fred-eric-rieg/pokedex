@@ -40,6 +40,8 @@ function loadMore() {
 async function getPokemons(amountOfPokemons) {
     hideCanvas();
     showLoadingScreen();
+    // Array.from creates an array with the length of amountOfPokemons, but with undefined values.
+    // These values are then filled (mapped) with the fetchPokemon function's return values (pokemon)
     const promises = Array.from({ length: amountOfPokemons }, (_, i) => fetchPokemon(i + 1));
     const pokemons = await Promise.all(promises);
     renderPokemon(pokemons.filter(p => p !== null).sort((a, b) => a.id - b.id));
