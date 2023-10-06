@@ -175,9 +175,9 @@ function renderSinglePokemon(pokemon) {
                     <button class="btn" id="closebtn" onclick="hideOverlay(event)" style="align-self:end;width:50px;height:40px;margin-top:0;">X</button>
                 </div>
                 <div class="arrow-img-arrow">
-                    <div class="arrow" onclick="previousPokemon(${pokemon.id})"><</div>
+                    <div class="arrow" onclick="previousPokemon(${pokemon.id - 1})"><</div>
                     <img id="img${pokemon.id}" style="height:150px;object-fit:contain;" src="${pokemon.sprites.front_default}">
-                    <div clasS="arrow" onclick="nextPokemon(${pokemon.id})">></div>
+                    <div clasS="arrow" onclick="nextPokemon(${pokemon.id - 1})">></div>
                 </div>
                 <div class="stats">health <div class="outer"><div class="inner" style="width:${pokemon.stats[0].base_stat}px;">${pokemon.stats[0].base_stat}</div></div></div>
                 <div class="stats">attack <div class="outer"><div class="inner" style="width:${pokemon.stats[1].base_stat}px;">${pokemon.stats[1].base_stat}</div></div></div>
